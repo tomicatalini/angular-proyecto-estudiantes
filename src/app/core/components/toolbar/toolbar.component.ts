@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-toolbar',
@@ -18,5 +19,13 @@ export class ToolbarComponent {
   sidenavToggle(){
     this.sidenav = !this.sidenav;
     this.sidenavChange.emit(this.sidenav);
+  }
+
+  notImplementedYet() {
+    Swal.fire({
+      icon: 'error',
+      title: 'Upss...',
+      text: 'No se ha implementado esta función aún!',
+    });
   }
 }

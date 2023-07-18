@@ -1,8 +1,8 @@
-<mat-toolbar class="flex flex-row align-items-center">
+<mat-toolbar class="flex flex-row align-items-center" color="primary">
     <button mat-icon-button (click)="sidenavToggle()">
       <mat-icon>menu</mat-icon>
     </button>
-    <span class="text-2xl">Estudiantes</span>
+    <span class="text-2xl">Coderhouse</span>
     <span class="flex-1"></span>
     <div class="w-3rem h-3rem surface-400 border-circle flex flex-row align-items-center justify-content-center select-none relative" [matMenuTriggerFor]="menu">
       <span>TC</span>
@@ -10,5 +10,5 @@
   </mat-toolbar>
 
   <mat-menu #menu="matMenu">
-    <button mat-menu-item>Cerrar Sesión</button>
+    <button mat-menu-item (click)="notImplementedYet()">Cerrar Sesión</button>
   </mat-menu>

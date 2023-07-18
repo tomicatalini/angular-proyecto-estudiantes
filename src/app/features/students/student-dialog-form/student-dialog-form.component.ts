@@ -10,7 +10,7 @@ import { Student } from '../models/student';
 })
 export class StudentDialogFormComponent {
   idControl = new FormControl(null);
-  nameControl= new FormControl(null, [Validators.required, Validators.minLength(4), Validators.maxLength(2)]);
+  nameControl= new FormControl(null, [Validators.required, Validators.minLength(4)]);
   surnameControl= new FormControl(null, [Validators.required]);
   birthdateControl= new FormControl(null);
   emailControl= new FormControl(null, [Validators.required, Validators.email]);
