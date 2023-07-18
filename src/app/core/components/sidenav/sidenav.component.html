@@ -1,0 +1,18 @@
+<mat-sidenav-container class="sidnav-wrap w-full" autosize>
+    <mat-sidenav
+      [opened]="sidenav" 
+      [mode]="small ? 'over' : 'side'" 
+      class="w-15rem">
+  
+      <mat-nav-list role="list">
+        <mat-list-item *ngFor="let menu of getMenues()" [activated]="menuSelected === menu" (click)="changeMenu(menu)">
+          <mat-icon matListItemIcon>{{menu.icon}}</mat-icon>
+          <div matListItemTitle>{{menu.title}}</div>
+        </mat-list-item>
+      </mat-nav-list>    
+    </mat-sidenav>
+  
+    <main class="grid grid-nogutter h-full w-full">
+      <app-students class="w-12 h-full p-4"></app-students>  
+    </main>
+  </mat-sidenav-container>

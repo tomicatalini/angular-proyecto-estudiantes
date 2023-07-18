@@ -1,0 +1,5 @@
+<h2 title class="my-3">Administración de Estudiantes</h2>
+<p>Listado de estudiantes anotados en el curso.</p>
+<p>Aquí podrá realizar Altas, Modificaciones y Bajas de los estudiantes del curso.</p>
+<button mat-raised-button color="primary" (click)="createUserDialog()">Nuevo Estudiante</button>
+<app-student-list class="w-12 p-4" [dataSource]="dataSource" (studentEdit)="edit($event)" (studentDelete)="delete($event)"></app-student-list>

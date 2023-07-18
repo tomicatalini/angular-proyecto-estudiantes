@@ -1,0 +1,14 @@
+<mat-toolbar class="flex flex-row align-items-center">
+    <button mat-icon-button (click)="sidenavToggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span class="text-2xl">Estudiantes</span>
+    <span class="flex-1"></span>
+    <div class="w-3rem h-3rem surface-400 border-circle flex flex-row align-items-center justify-content-center select-none relative" [matMenuTriggerFor]="menu">
+      <span>TC</span>
+    </div>
+  </mat-toolbar>
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>Cerrar Sesión</button>
+  </mat-menu>
