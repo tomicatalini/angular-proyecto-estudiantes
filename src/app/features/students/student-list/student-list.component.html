@@ -1,4 +1,4 @@
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">    
+<table mat-table [dataSource]="dataSource" class="shadow-2 border-round-md overflow-hidden">    
     <!-- Name Column -->
     <ng-container matColumnDef="completeName">
       <th mat-header-cell *matHeaderCellDef> Nombre </th>
@@ -49,4 +49,8 @@
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" [colSpan]="displayedColumns.length">No hay alumnos inscriptos en el curso..</td>
+    </tr>
   </table>

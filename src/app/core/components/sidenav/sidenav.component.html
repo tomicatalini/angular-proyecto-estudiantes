@@ -5,7 +5,11 @@
       class="w-15rem">
   
       <mat-nav-list role="list">
-        <mat-list-item *ngFor="let menu of getMenues()" [activated]="menuSelected === menu" (click)="changeMenu(menu)">
+        <mat-list-item *ngFor="let menu of getMenues()" 
+          class="select-none"
+          [activated]="menuSelected === menu" 
+          [disabled]="menu.disabled"
+          (click)="changeMenu(menu)">
           <mat-icon matListItemIcon>{{menu.icon}}</mat-icon>
           <div matListItemTitle>{{menu.title}}</div>
         </mat-list-item>

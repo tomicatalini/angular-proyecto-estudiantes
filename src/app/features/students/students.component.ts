@@ -25,7 +25,9 @@ export class StudentsComponent {
 
   createUserDialog(): void{
     this.dialog
-      .open(StudentDialogFormComponent)
+      .open(StudentDialogFormComponent, {
+        height: 'fit-content'
+      })
       .afterClosed()
       .subscribe( (data: Student) => {
         if(data){

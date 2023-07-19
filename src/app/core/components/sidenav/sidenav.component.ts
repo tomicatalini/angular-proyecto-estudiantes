@@ -1,14 +1,15 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild  } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatSidenav } from '@angular/material/sidenav';
+import { Component, EventEmitter, Input, OnInit, Output  } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { Menu } from '../../models/menu';
 
 const menues: Menu[] = [{
     icon: 'people',
-    title: 'Estudiantes'
+    title: 'Estudiantes',
+    disabled: false
   },{
     icon: 'class',
-    title: 'Cursos'
+    title: 'Cursos',
+    disabled: true
   }
 ]; 
 
@@ -17,7 +18,7 @@ const menues: Menu[] = [{
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.scss']
 })
-export class SidenavComponent implements OnInit {
+export class SidenavComponent {
   
   @Input() sidenav = false;
   @Output() sidenavChange = new EventEmitter();
@@ -36,12 +37,10 @@ export class SidenavComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    
-  }
-
   changeMenu(menu: Menu): void{
-    this.menuSelected = menu;
+    if(!menu.disabled){
+      this.menuSelected = menu;
+    }
   }
   
   getMenues(): Menu[] {

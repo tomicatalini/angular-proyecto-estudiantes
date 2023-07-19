@@ -1,5 +1,6 @@
 export interface Menu {
     icon: string,
-    title: string
+    title: string,
+    disabled: boolean
 }
   
