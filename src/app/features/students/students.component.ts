@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { Student } from './models/student';
 import { StudentDialogFormComponent } from './student-dialog-form/student-dialog-form.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DataService } from './services/data.service';
+import { Subject, finalize, takeUntil, Observable } from 'rxjs';
 
 const STUDENTS: Student[] = [{
   id: 1,
@@ -18,10 +20,31 @@ const STUDENTS: Student[] = [{
   templateUrl: './students.component.html',
   styleUrls: ['./students.component.scss']
 })
-export class StudentsComponent {
-  dataSource: Student[] = STUDENTS;
+export class StudentsComponent implements OnInit, OnDestroy{
+  dataSource$: Observable<Student[]>;
+  public destroyed = new Subject<boolean>();
+  
+  constructor(
+    public dialog: MatDialog,
+    private dataService: DataService
+  ){    
+    this.dataSource$ = this.dataService
+      .getStudents()
+      .pipe(
+        takeUntil(this.destroyed)
+      );
+  }
+  ngOnInit(): void {
+    this.dataService.loadStudents();
+  }
 
-  constructor(public dialog: MatDialog){}
+  edit(student: Student): void{
+    this.dataService.updateStudent(student);
+  }
+
+  delete(student: Student): void{
+    this.dataService.deleteStudent(student);
+  }
 
   createUserDialog(): void{
     this.dialog
@@ -31,14 +54,12 @@ export class StudentsComponent {
       .afterClosed()
       .subscribe( (data: Student) => {
         if(data){
-          data.id = this.dataSource.length + 1;
-
-          this.dataSource = [...this.dataSource, data];          
+          this.dataService.createStudent(data);          
         }
       });
   }
 
-  edit(data: Student): void {
+  /*edit(data: Student): void {
     this.dialog
       .open(StudentDialogFormComponent, {data: data})
       .afterClosed()
@@ -63,5 +84,9 @@ export class StudentsComponent {
         this.dataSource = this.dataSource.filter(s => s.id !== data.id);
       }
     });
+  }
+ */  
+  ngOnDestroy(): void {
+    this.destroyed.next(true);
   }
 }

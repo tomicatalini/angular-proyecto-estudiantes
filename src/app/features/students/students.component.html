@@ -10,7 +10,7 @@
         (click)="createUserDialog()">Nuevo Estudiante</button>
     
     <app-student-list class="col-12 my-3" 
-        [dataSource]="dataSource" 
+        [dataSource]="(dataSource$ | async) || []" 
         (studentEdit)="edit($event)" 
         (studentDelete)="delete($event)"></app-student-list>
 </section>
