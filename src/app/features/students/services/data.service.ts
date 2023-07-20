@@ -1,35 +1,31 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Student } from '../models/student';
-
-const STUDENTS: Student[] = [{
-  id: 1,
-  name: 'Tomás',
-  surname: 'Catalini',
-  birthdate: new Date(1995,2,11),
-  email: 'tomascatalini@gmail.com',
-  phone: '123456789'
-}];
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
-  private students: Student[] = [];
-  private _students$ = new Subject<Student []>(); 
-  private student$: Observable<Student []> = this._students$.asObservable();
+  private students: Student[] = [{
+    id: 1,
+    name: 'Tomás',
+    surname: 'Catalini',
+    birthdate: new Date(1995,2,11),
+    email: 'tomascatalini@gmail.com',
+    phone: '123456789'
+  }];
+  private _students$ = new BehaviorSubject<Student []>([]); 
+  private students$: Observable<Student []>;
 
   constructor() {
-    this.student$.subscribe(data => console.log(data));
+    this.students$ = this._students$.asObservable();
   }
 
   getStudents(): Observable<Student[]>{
-    console.log('Entro al getStudents');
-    return this.student$;
+    return this.students$;
   }
 
   createStudent(student: Student): void {
-    console.log('Entro al create');
     this.students = [
       ...this.students,
       student
@@ -37,15 +33,11 @@ export class DataService {
   }
 
   loadStudents(): void {
-    console.log('Entro al load');
-
     this._students$.next(this.students);
   }
 
   updateStudent(student: Student): void {
-    console.log('Entro al update');
-
-    this.students.map(s => {return s.id === student.id ? {...s, ...student} : s});
+    this.students = this.students.map(s => {return s.id === student.id ? {...s, ...student} : s});
   }
 
   deleteStudentById(studentId: number): void {
