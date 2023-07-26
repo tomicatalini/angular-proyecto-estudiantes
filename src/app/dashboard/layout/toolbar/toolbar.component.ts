@@ -7,7 +7,6 @@ import Swal from 'sweetalert2';
   styleUrls: ['./toolbar.component.scss']
 })
 export class ToolbarComponent {
-  
   @Input()
   sidenav: boolean = false;
 

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Student } from '../models/student';
+import { Student } from '../model/student';
 
 @Component({
   selector: 'app-student-list',

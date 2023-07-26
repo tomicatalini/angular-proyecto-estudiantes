@@ -1,24 +1,24 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Student } from './models/student';
-import { StudentDialogFormComponent } from './student-dialog-form/student-dialog-form.component';
+import { Component } from '@angular/core';
+import { Observable, Subject, finalize, map, takeUntil } from 'rxjs';
+import { Student } from './model/student';
 import { MatDialog } from '@angular/material/dialog';
-import { DataService } from './services/data.service';
-import { Subject, finalize, takeUntil, Observable, map } from 'rxjs';
+import { StudentService } from './student.service';
+import { StudentDialogFormComponent } from './student-dialog-form/student-dialog-form.component';
 
 @Component({
-  selector: 'app-students',
-  templateUrl: './students.component.html',
-  styleUrls: ['./students.component.scss']
+  selector: 'app-student',
+  templateUrl: './student.component.html',
+  styleUrls: ['./student.component.scss']
 })
-export class StudentsComponent implements OnInit, OnDestroy{
+export class StudentComponent {
   dataSource$: Observable<Student[]>;
   public destroyed = new Subject<boolean>();
   
   constructor(
     public dialog: MatDialog,
-    private dataService: DataService
+    private studentService: StudentService
   ){    
-    this.dataSource$ = this.dataService
+    this.dataSource$ = this.studentService
       .getStudents()
       .pipe(
         map((students) => students.map( s => ({
@@ -29,7 +29,7 @@ export class StudentsComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    this.dataService.loadStudents();
+    this.studentService.loadStudents();
   }
 
   edit(student: Student): void{
@@ -42,14 +42,14 @@ export class StudentsComponent implements OnInit, OnDestroy{
       )
       .subscribe( (edited: Student) => {
         if(edited){
-          this.dataService.updateStudent(edited);
+          this.studentService.updateStudent(edited);
         }
       });
   }
 
   delete(student: Student): void{
-    this.dataService.deleteStudent(student);
-    this.dataService.loadStudents();
+    this.studentService.deleteStudent(student);
+    this.studentService.loadStudents();
   }
 
   createUserDialog(): void{
@@ -62,13 +62,13 @@ export class StudentsComponent implements OnInit, OnDestroy{
       )
       .subscribe( (newStudent: Student) => {
         if(newStudent){
-          this.dataService.createStudent(newStudent);    
+          this.studentService.createStudent(newStudent);    
         }
       });
   }
 
   loadStudent(): void{
-    this.dataService.loadStudents();
+    this.studentService.loadStudents();
   }
 
   ngOnDestroy(): void {

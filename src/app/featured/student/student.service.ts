@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
+import { Student } from './model/student';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Student } from '../models/student';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DataService {
+export class StudentService {
+
   private students: Student[] = [{
     id: 1,
     name: 'Tomás',

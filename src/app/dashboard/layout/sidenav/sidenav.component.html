@@ -1,5 +1,6 @@
 <mat-sidenav-container class="sidnav-wrap w-full" autosize>
     <mat-sidenav
+      #matSidenav
       [opened]="sidenav" 
       [mode]="small ? 'over' : 'side'" 
       class="w-15rem">
@@ -17,6 +18,6 @@
     </mat-sidenav>
   
     <main class="grid grid-nogutter h-full w-full">
-      <app-students class="w-12 h-full p-4"></app-students>  
+      <app-student class="w-12 h-full p-4"></app-student>  
     </main>
   </mat-sidenav-container>

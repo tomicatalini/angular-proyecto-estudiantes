@@ -1,16 +1,16 @@
-import { Component, EventEmitter, Input, OnInit, Output  } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Menu } from '../../models/menu';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Menu } from 'src/app/core/models/menu';
 
 const menues: Menu[] = [{
-    icon: 'people',
-    title: 'Estudiantes',
-    disabled: false
-  },{
-    icon: 'class',
-    title: 'Cursos',
-    disabled: true
-  }
+  icon: 'people',
+  title: 'Estudiantes',
+  disabled: false
+},{
+  icon: 'class',
+  title: 'Cursos',
+  disabled: true
+}
 ]; 
 
 @Component({
@@ -19,7 +19,6 @@ const menues: Menu[] = [{
   styleUrls: ['./sidenav.component.scss']
 })
 export class SidenavComponent {
-  
   @Input() sidenav = false;
   @Output() sidenavChange = new EventEmitter();
 
