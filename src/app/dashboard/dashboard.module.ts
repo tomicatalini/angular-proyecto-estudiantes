@@ -5,6 +5,7 @@ import { ToolbarComponent } from './layout/toolbar/toolbar.component';
 import { DashboardComponent } from './dashboard.component';
 import { MaterialModule } from '../shared/modules/material.module';
 import { StudentModule } from '../featured/student/student.module';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -16,6 +17,7 @@ import { StudentModule } from '../featured/student/student.module';
   ],
   imports: [
     CommonModule,
+    RouterModule,
     MaterialModule,
     StudentModule
   ],

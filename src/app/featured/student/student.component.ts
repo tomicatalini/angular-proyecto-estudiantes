@@ -3,7 +3,7 @@ import { Observable, Subject, finalize, map, takeUntil } from 'rxjs';
 import { Student } from './model/student';
 import { MatDialog } from '@angular/material/dialog';
 import { StudentService } from './student.service';
-import { StudentDialogFormComponent } from './student-dialog-form/student-dialog-form.component';
+import { StudentDialogFormComponent } from './components/student-dialog-form/student-dialog-form.component';
 
 @Component({
   selector: 'app-student',
@@ -37,8 +37,7 @@ export class StudentComponent {
       .open(StudentDialogFormComponent, {data: student})
       .afterClosed()
       .pipe(
-        takeUntil(this.destroyed),
-        finalize(() => this.loadStudent())
+        takeUntil(this.destroyed)
       )
       .subscribe( (edited: Student) => {
         if(edited){
@@ -48,8 +47,7 @@ export class StudentComponent {
   }
 
   delete(student: Student): void{
-    this.studentService.deleteStudent(student);
-    this.studentService.loadStudents();
+    this.studentService.deleteStudentById(student.id);
   }
 
   createUserDialog(): void{
@@ -57,8 +55,7 @@ export class StudentComponent {
       .open(StudentDialogFormComponent)
       .afterClosed()
       .pipe(
-        takeUntil(this.destroyed),
-        finalize(() => this.loadStudent())
+        takeUntil(this.destroyed)
       )
       .subscribe( (newStudent: Student) => {
         if(newStudent){

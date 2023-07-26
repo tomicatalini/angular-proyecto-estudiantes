@@ -24,11 +24,6 @@
             <mat-datepicker #picker></mat-datepicker>
             <mat-error *ngFor="let error of birthdateControl.errors | keyvalue">{{ error | formControlError: 'Fecha de Nacimiento' }}</mat-error>
         </mat-form-field>
-        <mat-form-field appearance="outline" class="col-12">
-            <mat-label>Telefono</mat-label>
-            <input matInput formControlName="phone" type="text">
-            <mat-error *ngFor="let error of phoneControl.errors | keyvalue">{{ error | formControlError: 'Teléfono' }}</mat-error>
-        </mat-form-field>
         <button mat-raised-button color="primary" class="col-12" (click)="close()">Enviar</button>
     </form>
 </mat-dialog-content>

@@ -8,6 +8,7 @@
       <mat-nav-list role="list">
         <mat-list-item *ngFor="let menu of getMenues()" 
           class="select-none"
+          [routerLink]="menu.route"
           [activated]="menuSelected === menu" 
           [disabled]="menu.disabled"
           (click)="changeMenu(menu)">
@@ -17,7 +18,7 @@
       </mat-nav-list>    
     </mat-sidenav>
   
-    <main class="grid grid-nogutter h-full w-full">
-      <app-student class="w-12 h-full p-4"></app-student>  
+    <main>
+      <router-outlet></router-outlet>  
     </main>
   </mat-sidenav-container>

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Student } from '../model/student';
+import { Student } from '../../model/student';
 
 @Component({
   selector: 'app-student-list',
@@ -8,7 +8,7 @@ import { Student } from '../model/student';
 })
 export class StudentListComponent {
   // displayedColumns: string[] = ['name', 'surname', 'email', 'birthdate', 'phone', 'actions'];
-  displayedColumns: string[] = ['completeName', 'email', 'birthdate', 'phone', 'actions'];
+  displayedColumns: string[] = ['completeName', 'email', 'birthdate', 'registerDate', 'actions'];
 
   @Input()
   dataSource: Student[] = [];

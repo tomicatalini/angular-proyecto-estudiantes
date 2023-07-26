@@ -3,15 +3,21 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Menu } from 'src/app/core/models/menu';
 
 const menues: Menu[] = [{
+    icon: 'home',
+    title: 'Inicio',
+    route: 'home',
+    disabled: false
+  },{
   icon: 'people',
   title: 'Estudiantes',
+  route: 'student',
   disabled: false
-},{
-  icon: 'class',
-  title: 'Cursos',
-  disabled: true
-}
-]; 
+  },{
+    icon: 'class',
+    title: 'Cursos',
+    route: 'course',
+    disabled: false
+}]; 
 
 @Component({
   selector: 'app-sidenav',

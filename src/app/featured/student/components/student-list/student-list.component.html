@@ -29,9 +29,9 @@
     </ng-container>
 
     <!-- phone Column -->
-    <ng-container matColumnDef="phone">
-      <th mat-header-cell *matHeaderCellDef> Telefono </th>
-      <td mat-cell *matCellDef="let student"> {{student.phone}} </td>
+    <ng-container matColumnDef="registerDate">
+      <th mat-header-cell *matHeaderCellDef> Fecha de Registro </th>
+      <td mat-cell *matCellDef="let student"> {{student.registerDate | date:'short'}} </td>
     </ng-container>
 
     <!-- Actions Column -->

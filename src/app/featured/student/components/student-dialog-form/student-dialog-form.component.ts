@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Student } from '../model/student';
+import { Student } from '../../model/student';
 
 @Component({
   selector: 'app-student-dialog-form',
@@ -14,15 +14,13 @@ export class StudentDialogFormComponent {
   surnameControl= new FormControl(null, [Validators.required]);
   birthdateControl= new FormControl(null);
   emailControl= new FormControl(null, [Validators.required, Validators.email]);
-  phoneControl= new FormControl(null);
 
   studentForm: FormGroup = new FormGroup({
     id: this.idControl,
     name: this.nameControl,
     surname: this.surnameControl,
     birthdate: this.birthdateControl,
-    email: this.emailControl,
-    phone: this.phoneControl
+    email: this.emailControl
   }); 
 
   constructor(
@@ -34,7 +32,7 @@ export class StudentDialogFormComponent {
 
   close(){
     if(this.studentForm.valid){
-      this.dialogRef.close(this.studentForm.value);
+      this.dialogRef.close({...this.studentForm.value, registerDate: new Date()});
     }
   }
 }

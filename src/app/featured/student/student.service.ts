@@ -1,53 +1,58 @@
 import { Injectable } from '@angular/core';
 import { Student } from './model/student';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, take, map } from 'rxjs';
+import { StudentMockService } from './mocks/student-mock.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StudentService {
+  private students$ = new BehaviorSubject<Student []>([]); 
 
-  private students: Student[] = [{
-    id: 1,
-    name: 'Tomás',
-    surname: 'Catalini',
-    birthdate: new Date(1995,2,11),
-    email: 'tomascatalini@gmail.com',
-    phone: '123456789'
-  }];
-  private _students$ = new BehaviorSubject<Student []>([]); 
-  private students$: Observable<Student []>;
-
-  constructor() {
-    this.students$ = this._students$.asObservable();
-  }
+  constructor(
+    private studentMockService: StudentMockService
+  ) {}
 
   getStudents(): Observable<Student[]>{
-    return this.students$;
-  }
-
-  createStudent(student: Student): void {
-    this.students = [
-      ...this.students,
-      student
-    ];
+    return this.students$.asObservable();
   }
 
   loadStudents(): void {
-    this._students$.next(this.students);
+    this.students$.next(this.studentMockService.getStudents());
   }
+
+  getStudentById(id: number): Observable<Student | undefined> {
+    return this.students$.pipe(take(1),map( (students) => students.find( s => s.id === id)));
+  }
+
+  createStudent(newStudent: Student): void {
+    this.students$
+      .pipe(
+        take(1)
+      )
+      .subscribe( students => {
+        this.students$.next([...students, {...newStudent, id: students.length + 1}]);
+      });
+  }  
 
   updateStudent(student: Student): void {
-    this.students = this.students.map(s => {return s.id === student.id ? {...s, ...student} : s});
+    this.students$
+      .pipe(
+        take(1)
+      )
+      .subscribe( students => {
+        this.students$.next(students.map(s => {return s.id === student.id ? {...s, ...student} : s}));
+      });
+    
   }
 
-  deleteStudentById(studentId: number): void {
-    console.log('Entro al delete id');
-
-    this.students = this.students.filter(s => s.id !== studentId);
-  }
-
-  deleteStudent(student: Student): void {
-    this.deleteStudentById(student.id);
+  deleteStudentById(id: number): void {
+    this.students$
+    .pipe(
+      take(1)
+    )
+    .subscribe( students => {
+      this.students$.next(students.filter(s => s.id !== id));
+    });
   }
 }
