@@ -13,11 +13,22 @@ const menues: Menu[] = [{
   route: 'student',
   disabled: false
   },{
-    icon: 'class',
+    icon: 'collections_bookmark',
     title: 'Cursos',
     route: 'course',
     disabled: false
-}]; 
+  },{
+    icon: 'class',
+    title: 'Materias',
+    route: 'subject',
+    disabled: false
+  },{
+    icon: 'manage_accounts',
+    title: 'Usuarios',
+    route: 'user',
+    disabled: false
+  }
+]; 
 
 @Component({
   selector: 'app-sidenav',

@@ -1,1 +1,17 @@
-<p>course works!</p>
+<div class="m-5 mb-3">
+    <h2 title class="my-2">Cursos</h2>
+    <section class="grid grid-nogutter py-2">   
+        <p class="col-12">En esta sección se encuentran los cursos que se dictan en la plataforma.</p>
+        <p class="col-12">Aquí podrá realizar Altas, Modificaciones y Bajas de los mismos.</p>
+    </section>
+</div>
+<section class="grid grid-nogutter mx-3">
+    <button mat-raised-button 
+        color="primary"
+        (click)="createUserDialog()">Nuevo Curso</button>
+
+        <app-course-table class="col-12 my-3" 
+            [dataSource]="(dataSource$ | async) || []" 
+            (courseEdit)="edit($event)" 
+            (courseDelete)="delete($event)"></app-course-table>
+</section>

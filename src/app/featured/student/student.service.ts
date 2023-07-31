@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Student } from './model/student';
-import { BehaviorSubject, Observable, take, map } from 'rxjs';
-import { StudentMockService } from './mocks/student-mock.service';
+import { BehaviorSubject, Observable, take, map, of } from 'rxjs';
+import { StudentMockService } from './mock/student-mock.service';
 
 @Injectable({
   providedIn: 'root'
@@ -54,5 +54,13 @@ export class StudentService {
     .subscribe( students => {
       this.students$.next(students.filter(s => s.id !== id));
     });
+  }
+
+  getTotal(): Observable<number> {
+    return this.students$
+      .pipe(
+        take(1),
+        map((students) => students.length)
+      );
   }
 }

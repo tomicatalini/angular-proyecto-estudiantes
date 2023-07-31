@@ -1,0 +1,17 @@
+<div class="m-5 mb-3">
+    <h2 title class="my-2">Usuarios</h2>
+    <section class="grid grid-nogutter py-2">   
+        <p class="col-12">En esta sección se encuentran los usuarios que pueden ingresar y operar en la plataforma.</p>
+        <p class="col-12">Aquí podrá realizar Altas, Modificaciones y Bajas de los mismos.</p>
+    </section>
+</div>
+<section class="grid grid-nogutter mx-3">
+    <button mat-raised-button 
+        color="primary"
+        (click)="createUserDialog()">Nuevo Usuario</button>
+
+        <app-user-table class="col-12 my-3" 
+            [dataSource]="(dataSource$ | async) || []" 
+            (userEdit)="edit($event)" 
+            (userDelete)="delete($event)"></app-user-table>
+</section>

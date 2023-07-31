@@ -7,7 +7,9 @@ import { CompleteNamePipe } from './pipes/complete-name.pipe';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/shared/modules/material.module';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { StudentMockService } from './mocks/student-mock.service';
+import { StudentMockService } from './mock/student-mock.service';
+import { StudentDetailComponent } from './components/student-detail/student-detail.component';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -16,17 +18,20 @@ import { StudentMockService } from './mocks/student-mock.service';
     StudentComponent,
     StudentListComponent,
     StudentDialogFormComponent,
-    CompleteNamePipe
+    StudentDetailComponent,
+    CompleteNamePipe,
   ],
   imports: [
     CommonModule,
     MaterialModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    RouterModule,
   ],
   exports:[
     StudentComponent,
     StudentListComponent,
+    StudentDetailComponent,
   ],
   providers: [StudentMockService]
 })

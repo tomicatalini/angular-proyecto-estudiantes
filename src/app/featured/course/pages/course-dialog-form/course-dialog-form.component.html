@@ -1,0 +1,26 @@
+<h2 mat-dialog-title title>Datos del Curso</h2>
+<mat-dialog-content>
+    <form [formGroup]="form" class="grid">
+        <input matInput formControlName="id" type="number" hidden>
+        <mat-form-field appearance="outline" class="col-6">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="name" type="text">
+            <mat-error *ngFor="let error of nameControl.errors | keyvalue">{{ error | formControlError: 'Nombre' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Fecha de Inicio</mat-label>
+            <input matInput formControlName="startDate" [matDatepicker]="picker">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngFor="let error of startDateControl.errors | keyvalue">{{ error | formControlError: 'Fecha de Inicio' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Fecha de Finalización</mat-label>
+            <input matInput formControlName="endDate" [matDatepicker]="pickerEndDate">
+            <mat-datepicker-toggle matIconSuffix [for]="pickerEndDate"></mat-datepicker-toggle>
+            <mat-datepicker #pickerEndDate></mat-datepicker>
+            <mat-error *ngFor="let error of endDateControl.errors | keyvalue">{{ error | formControlError: 'Fecha de Finalización' }}</mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="primary" class="col-12" (click)="close()">Guardar</button>
+    </form>
+</mat-dialog-content>

@@ -4,11 +4,12 @@
     </button>
     <span class="text-2xl">Coderhouse</span>
     <span class="flex-1"></span>
-    <div class="w-3rem h-3rem select-none" [matMenuTriggerFor]="menu">
-      <div class="flex flex-row align-items-center justify-content-center border-circle w-full h-full bg-red-400 cursor-pointer">TC</div>
+    <div class="relative w-3rem h-3rem select-none" [matMenuTriggerFor]="menu">
+      <div class="flex flex-row align-items-center justify-content-center border-circle w-full h-full bg-red-400 ">TC</div>
+      <mat-icon class="w-1rem h-1rem text-base absolute bottom-0 right-0 surface-300 border-circle cursor-pointer">expand_more</mat-icon>
     </div>
   </mat-toolbar>
 
   <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="notImplementedYet()">Cerrar Sesión</button>
+    <button mat-menu-item (click)="logout()">Cerrar Sesión</button>
   </mat-menu>

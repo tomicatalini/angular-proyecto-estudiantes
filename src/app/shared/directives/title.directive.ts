@@ -1,7 +1,7 @@
 import { Directive, ElementRef } from '@angular/core';
 
 @Directive({
-  selector: '[appTitle]'
+  selector: '[title]'
 })
 export class TitleDirective {
 
@@ -11,7 +11,7 @@ export class TitleDirective {
     private elementRef: ElementRef
   ) {
     if(this.headers.includes(this.elementRef.nativeElement.tagName)){
-      this.elementRef.nativeElement.style.fontSize = '20px';
+      this.elementRef.nativeElement.style.fontSize = '28px';
     } 
   }
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Observable, Subject, finalize, map, takeUntil } from 'rxjs';
+import { Observable, Subject, map, takeUntil } from 'rxjs';
 import { Student } from './model/student';
 import { MatDialog } from '@angular/material/dialog';
 import { StudentService } from './student.service';

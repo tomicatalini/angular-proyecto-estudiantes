@@ -6,9 +6,7 @@ import { CourseComponent } from './course/course.component';
 
 
 @NgModule({
-  declarations: [  
-    CourseComponent
-  ],
+  declarations: [],
   imports: [
     CommonModule,
     FeaturedRoutingModule

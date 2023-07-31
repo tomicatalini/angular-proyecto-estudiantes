@@ -1,0 +1,17 @@
+<h2 mat-dialog-title title>Datos de las Clases</h2>
+<mat-dialog-content>
+    <form [formGroup]="form" class="grid">
+        <input matInput formControlName="id" type="number" hidden>
+        <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="name" type="text">
+            <mat-error *ngFor="let error of nameControl.errors | keyvalue">{{ error | formControlError: 'Nombre' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Descripción</mat-label>
+            <textarea matInput formControlName="description" rows="10"></textarea>
+            <mat-error *ngFor="let error of descriptionControl.errors | keyvalue">{{ error | formControlError: 'Descripción' }}</mat-error>
+        </mat-form-field>        
+        <button mat-raised-button color="primary" class="col-12" (click)="close()">Guardar</button>
+    </form>
+</mat-dialog-content>

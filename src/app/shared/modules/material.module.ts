@@ -13,9 +13,10 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import {MatNativeDateModule} from '@angular/material/core';
 import {LayoutModule} from '@angular/cdk/layout';
-
+import {MatRadioModule} from '@angular/material/radio';
+import {MatCardModule} from '@angular/material/card';
 
 @NgModule({
   declarations: [],
@@ -35,7 +36,9 @@ import {LayoutModule} from '@angular/cdk/layout';
     MatDialogModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    LayoutModule
+    LayoutModule,
+    MatRadioModule,
+    MatCardModule
   ]
 })
 export class MaterialModule { }
