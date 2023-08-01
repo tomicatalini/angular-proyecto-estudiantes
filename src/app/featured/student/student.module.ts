@@ -10,6 +10,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { StudentMockService } from './mock/student-mock.service';
 import { StudentDetailComponent } from './components/student-detail/student-detail.component';
 import { RouterModule } from '@angular/router';
+import { StudentRoutingModule } from './student-routing.module';
 
 
 
@@ -23,6 +24,7 @@ import { RouterModule } from '@angular/router';
   ],
   imports: [
     CommonModule,
+    StudentRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
     SharedModule,

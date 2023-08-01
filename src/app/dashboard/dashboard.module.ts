@@ -10,6 +10,7 @@ import { CourseModule } from '../featured/course/course.module';
 import { UserModule } from '../featured/user/user.module';
 import { SubjectModule } from '../featured/subject/subject.module';
 import { HomeModule } from '../featured/home/home.module';
+import { DashboarRoutingModule } from './dashboard-routing.module';
 
 
 
@@ -21,6 +22,7 @@ import { HomeModule } from '../featured/home/home.module';
   ],
   imports: [
     CommonModule,
+    DashboarRoutingModule,
     RouterModule,
     MaterialModule,
     StudentModule,
