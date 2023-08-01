@@ -12,7 +12,7 @@
             <input matInput formControlName="surname" type="text">
             <mat-error *ngFor="let error of surnameControl.errors | keyvalue">{{ error | formControlError: 'Apellido' }}</mat-error>
         </mat-form-field>
-        <mat-form-field appearance="outline" class="col-6">
+        <mat-form-field appearance="outline" class="col-12">
             <mat-label>Correo Electrónico</mat-label>
             <input matInput formControlName="email" type="email">
             <mat-error *ngFor="let error of emailControl.errors | keyvalue">{{ error | formControlError: 'Correo Electrónico' }}</mat-error>
@@ -25,19 +25,14 @@
             </button>
             <mat-error *ngFor="let error of passwordControl.errors | keyvalue">{{ error | formControlError: 'Contraseña' }}</mat-error>
         </mat-form-field>
-        <!-- <mat-form-field appearance="outline" class="col-6"> -->
-            <!-- <mat-label>Rol</mat-label>
-            <mat-checkbox formControlName="role" value="admin">Administrador</mat-checkbox> -->
-            <div >
-                <mat-label>Rol</mat-label>
-                <mat-radio-group formControlName="role">
-                    <mat-radio-button value="administrador">Administrador</mat-radio-button>
-                    <mat-radio-button value="profesor">Profesor</mat-radio-button>
-                    <mat-radio-button value="tutor">Tutor</mat-radio-button>
-                </mat-radio-group>
-            </div>
-            <!-- <mat-error *ngFor="let error of surnameControl.errors | keyvalue">{{ error | formControlError: 'Rol' }}</mat-error> -->
-        <!-- </mat-form-field> -->
+        <div class="col-12 flex flex-column">
+            <mat-label>Rol</mat-label>
+            <mat-radio-group formControlName="role">
+                <mat-radio-button value="administrador">Administrador</mat-radio-button>
+                <mat-radio-button value="profesor">Profesor</mat-radio-button>
+                <mat-radio-button value="tutor">Tutor</mat-radio-button>
+            </mat-radio-group>
+        </div>
         <button mat-raised-button color="primary" class="col-12" (click)="close()">Guardar</button>
     </form>
 </mat-dialog-content>

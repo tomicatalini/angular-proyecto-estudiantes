@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Course } from '../../model/model';
@@ -8,7 +8,7 @@ import { Course } from '../../model/model';
   templateUrl: './course-dialog-form.component.html',
   styleUrls: ['./course-dialog-form.component.scss']
 })
-export class CourseDialogFormComponent {
+export class CourseDialogFormComponent implements OnInit {
 
   idControl = new FormControl<number | null>(null);
   nameControl = new FormControl<string | null>(null, [Validators.required]);
@@ -29,6 +29,9 @@ export class CourseDialogFormComponent {
     if(data){
       this.form.patchValue(data);
     }
+  }
+  ngOnInit(): void {
+    this.dialogRef.updateSize('40%');
   }
 
   close(){

@@ -14,7 +14,7 @@ export class UserMockService {
       email: 'tomi@gmail.com',
       password: '12345',
       token: 'asdsads',
-      role: 'admin'
+      role: 'administrador'
     }
   ]
   

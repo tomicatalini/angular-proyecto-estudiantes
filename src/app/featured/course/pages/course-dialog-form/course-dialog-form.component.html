@@ -2,7 +2,7 @@
 <mat-dialog-content>
     <form [formGroup]="form" class="grid">
         <input matInput formControlName="id" type="number" hidden>
-        <mat-form-field appearance="outline" class="col-6">
+        <mat-form-field appearance="outline" class="col-12">
             <mat-label>Nombre</mat-label>
             <input matInput formControlName="name" type="text">
             <mat-error *ngFor="let error of nameControl.errors | keyvalue">{{ error | formControlError: 'Nombre' }}</mat-error>
