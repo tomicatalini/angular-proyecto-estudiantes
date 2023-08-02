@@ -4,6 +4,7 @@ import { Student } from './model/student';
 import { MatDialog } from '@angular/material/dialog';
 import { StudentService } from './student.service';
 import { StudentDialogFormComponent } from './components/student-dialog-form/student-dialog-form.component';
+import { CustomNotifierService } from '../../core/services/custom-notifier.service';
 
 @Component({
   selector: 'app-student',
@@ -16,7 +17,8 @@ export class StudentComponent {
   
   constructor(
     public dialog: MatDialog,
-    private studentService: StudentService
+    private studentService: StudentService,
+    private customNotifierService: CustomNotifierService
   ){    
     this.dataSource$ = this.studentService
       .getStudents()
@@ -41,7 +43,7 @@ export class StudentComponent {
       )
       .subscribe( (edited: Student) => {
         if(edited){
-          this.studentService.updateStudent(edited);
+          this.studentService.updateStudent(student.id, edited);
         }
       });
   }

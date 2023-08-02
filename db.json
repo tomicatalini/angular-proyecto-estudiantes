@@ -1,6 +1,39 @@
 {
-    "users": [],
-    "students": [],
-    "courses": [],
-    "subjects": []
+  "users": [],
+  "students": [
+    {
+      "id": 1,
+      "name": "Juan Roman",
+      "surname": "Riquelme",
+      "birthdate": "2023-08-07T03:00:00.000Z",
+      "email": "jr@riquelme",
+      "registerDate": "2023-08-02T22:04:10.884Z"
+    },
+    {
+      "id": 2,
+      "name": "Michi \"Maraca\"",
+      "surname": "Fechter",
+      "birthdate": "2023-08-17T03:00:00.000Z",
+      "email": "mm@asdas",
+      "registerDate": "2023-08-02T23:06:13.912Z"
+    },
+    {
+      "id": 3,
+      "name": "Tomas",
+      "surname": "Catalini",
+      "birthdate": "2023-08-11T03:00:00.000Z",
+      "email": "tc@example",
+      "registerDate": "2023-08-02T23:06:45.275Z"
+    },
+    {
+      "id": 4,
+      "name": "John",
+      "surname": "Doe",
+      "birthdate": "2023-08-11T03:00:00.000Z",
+      "email": "jd@example.com",
+      "registerDate": "2023-08-02T23:08:04.327Z"
+    }
+  ],
+  "courses": [],
+  "subjects": []
 }

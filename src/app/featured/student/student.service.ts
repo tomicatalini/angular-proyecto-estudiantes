@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Student } from './model/student';
-import { BehaviorSubject, Observable, take, map, of } from 'rxjs';
+import { BehaviorSubject, Observable, take, map, of, mergeMap, catchError } from 'rxjs';
 import { StudentMockService } from './mock/student-mock.service';
+import { ApiService } from 'src/app/core/services/api.service';
+import { CustomNotifierService } from '../../core/services/custom-notifier.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +12,9 @@ export class StudentService {
   private students$ = new BehaviorSubject<Student []>([]); 
 
   constructor(
-    private studentMockService: StudentMockService
+    private studentMockService: StudentMockService,
+    private apiService: ApiService<Student>,
+    private notifierService: CustomNotifierService
   ) {}
 
   getStudents(): Observable<Student[]>{
@@ -18,42 +22,43 @@ export class StudentService {
   }
 
   loadStudents(): void {
-    this.students$.next(this.studentMockService.getStudents());
+    this.apiService
+      .getAll('students')
+      .subscribe(students => this.students$.next(students));
   }
 
   getStudentById(id: number): Observable<Student | undefined> {
-    return this.students$.pipe(take(1),map( (students) => students.find( s => s.id === id)));
+    return this.apiService.getById('students', id).pipe(take(1));
   }
 
-  createStudent(newStudent: Student): void {
-    this.students$
-      .pipe(
-        take(1)
+  createStudent(payload: Student): void {
+    this.apiService
+      .create('students', payload)
+      .pipe(        
+        mergeMap((newStudent) => this.students$.pipe(
+          take(1),
+          map((students) => [...students, newStudent])
+        ))
       )
-      .subscribe( students => {
-        this.students$.next([...students, {...newStudent, id: students.length + 1}]);
+      .subscribe( {
+        next: students => {
+          this.students$.next(students);
+          this.notifierService.toastSuccessNotification('Tenemos un nuevo estudiante!');
+        },
+        error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación..')
       });
   }  
 
-  updateStudent(student: Student): void {
-    this.students$
-      .pipe(
-        take(1)
-      )
-      .subscribe( students => {
-        this.students$.next(students.map(s => {return s.id === student.id ? {...s, ...student} : s}));
-      });
-    
+  updateStudent(id: string | number, payload: Student): void {
+    this.apiService
+      .updateById('students', id, payload)
+      .subscribe(() => this.loadStudents());    
   }
 
   deleteStudentById(id: number): void {
-    this.students$
-    .pipe(
-      take(1)
-    )
-    .subscribe( students => {
-      this.students$.next(students.filter(s => s.id !== id));
-    });
+    this.apiService
+      .deleteById('students', id)
+      .subscribe(() => this.loadStudents());
   }
 
   getTotal(): Observable<number> {
