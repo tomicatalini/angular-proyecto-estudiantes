@@ -35,7 +35,7 @@ export class SubjectComponent {
       .subscribe( (edited: Subject) => {
         console.log(edited);
         if(edited){
-          this.subjectService.update(edited);
+          this.subjectService.update(subject.id, edited);
         }
       });
   }

@@ -35,7 +35,7 @@ export class UserComponent {
       .subscribe( (edited: User) => {
         console.log(edited);
         if(edited){
-          this.userService.update(edited);
+          this.userService.update(user.id, edited);
         }
       });
   }

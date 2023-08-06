@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Student } from './model/student';
-import { BehaviorSubject, Observable, take, map, of, mergeMap, catchError } from 'rxjs';
-import { StudentMockService } from './mock/student-mock.service';
+import { BehaviorSubject, Observable, take, map, mergeMap } from 'rxjs';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CustomNotifierService } from '../../core/services/custom-notifier.service';
 
@@ -12,7 +11,6 @@ export class StudentService {
   private students$ = new BehaviorSubject<Student []>([]); 
 
   constructor(
-    private studentMockService: StudentMockService,
     private apiService: ApiService<Student>,
     private notifierService: CustomNotifierService
   ) {}

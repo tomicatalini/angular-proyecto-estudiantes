@@ -35,7 +35,7 @@ export class CourseComponent {
       .subscribe( (edited: Course) => {
         console.log(edited);
         if(edited){
-          this.courseService.update(edited);
+          this.courseService.update(course.id, edited);
         }
       });
   }
@@ -44,7 +44,7 @@ export class CourseComponent {
     this.courseService.deleteById(course.id);
   }
 
-  createUserDialog(): void{
+  createCourseDialog(): void{
     this.dialog
       .open(CourseDialogFormComponent)
       .afterClosed()

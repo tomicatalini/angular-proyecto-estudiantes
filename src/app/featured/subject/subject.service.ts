@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map, take } from 'rxjs';
+import { BehaviorSubject, Observable, take } from 'rxjs';
 import { Subject } from './model/models';
-import { SubjectMockService } from './mock/subject-mock.service';
+import { ApiService } from 'src/app/core/services/api.service';
+import { CustomNotifierService } from 'src/app/core/services/custom-notifier.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ export class SubjectService {
   private _subjects$ = new BehaviorSubject<Subject[]>([]);
 
   constructor(
-    private subjectMockService: SubjectMockService
+    private apiService: ApiService<Subject>,
+    private notifierService: CustomNotifierService
   ) {}
 
   getAll(): Observable<Subject[]> {
@@ -19,41 +21,53 @@ export class SubjectService {
   }
 
   getById(subjectId: number): Observable<Subject | undefined> {
-    return this._subjects$
-      .pipe(
-        take(1),
-        map((subjects) => {
-          return subjects.find(subject => subject.id === subjectId)
-        })        
-      );
+    return this.apiService.getById('subjects', subjectId).pipe(take(1));
   }
 
-  load(): void{
-    this._subjects$.next(this.subjectMockService.getSubjects());
+  load(): void {
+    this.apiService
+      .getAll('subjects')
+      .subscribe({
+        next: (subjects) => {
+          this._subjects$.next(subjects)
+        },
+        error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
+      })
   }
 
-  create(subject: Subject): void {
-    this._subjects$
-      .pipe(take(1))
-      .subscribe(subjects => this._subjects$.next([...subjects, {...subject, id: subjects.length + 1}]));      
+  create(payload: Subject): void {
+    this.apiService
+      .create('subjects', payload)
+      .subscribe({
+        next: () => {
+          this.load();
+          this.notifierService.toastSuccessNotification('Operación exitosa!');
+        },
+        error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
+      });
   }
 
-  update(newSubject: Subject): void {
-    this._subjects$
-      .pipe(take(1))
-      .subscribe(subjects => {
-        this._subjects$.next(
-          subjects.map((subject) => {
-            return subject.id === newSubject.id ? {...subject, ...newSubject} : subject}
-          )
-        )});
+  update(id: number | string, payload: Subject): void {
+    this.apiService
+    .updateById('subjects', id, payload)
+    .subscribe({
+      next: () => {
+        this.load();
+        this.notifierService.toastSuccessNotification('Operación exitosa!');
+      },
+      error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
+    });
   }
 
   deleteById(subjectId: number): void {
-    this._subjects$
-      .pipe(take(1))
-      .subscribe(subjects => this._subjects$.next(
-        subjects.filter(subject => subject.id !== subjectId)
-      ));
+    this.apiService
+      .deleteById('subjects', subjectId)
+      .subscribe({
+        next: () => {
+          this.load();
+          this.notifierService.toastSuccessNotification('Operación exitosa!');
+        },
+        error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
+      });
   }
 }

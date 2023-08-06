@@ -1,5 +1,15 @@
 {
-  "users": [],
+  "users": [
+    {
+      "id": 2,
+      "name": "test",
+      "surname": "test",
+      "email": "test@test.com",
+      "password": "12345",
+      "token": "P6YxOm0hX3B6mxgb0sHs",
+      "role": "administrador"
+    }
+  ],
   "students": [
     {
       "id": 1,

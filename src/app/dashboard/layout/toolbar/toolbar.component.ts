@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/featured/auth/auth.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -15,7 +16,8 @@ export class ToolbarComponent {
   sidenavChange = new  EventEmitter<boolean>();
 
   constructor(
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ){}
 
   sidenavToggle(){
@@ -33,7 +35,7 @@ export class ToolbarComponent {
       cancelButtonText: 'Cancelar'
     }).then(res => {
       if(res.isConfirmed){
-        this.router.navigate(['auth']);
+       this.authService.logout();
       }
     });
   }

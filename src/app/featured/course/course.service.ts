@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, pipe, take, map } from 'rxjs';
+import { BehaviorSubject, Observable, take } from 'rxjs';
 import { Course } from './model/model';
-import { CourseMockService } from './mock/course-mock.service';
+import { ApiService } from 'src/app/core/services/api.service';
+import { CustomNotifierService } from 'src/app/core/services/custom-notifier.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ export class CourseService {
   private _courses$ = new BehaviorSubject<Course[]>([]);
 
   constructor(
-    private courseMockService: CourseMockService
+    private apiService: ApiService<Course>,
+    private notifierService: CustomNotifierService
   ) {}
 
   getAll(): Observable<Course[]> {
@@ -19,41 +21,53 @@ export class CourseService {
   }
 
   getById(courseId: number): Observable<Course | undefined> {
-    return this._courses$
-      .pipe(
-        take(1),
-        map((courses) => {
-          return courses.find(c => c.id === courseId)
-        })        
-      );
+    return this.apiService.getById('courses', courseId).pipe(take(1));
   }
 
-  load(): void{
-    this._courses$.next(this.courseMockService.getCourses());
+  load(): void {
+    this.apiService
+      .getAll('courses')
+      .subscribe({
+        next: (courses) => {
+          this._courses$.next(courses)
+        },
+        error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
+      })
   }
 
-  create(course: Course): void {
-    this._courses$
-      .pipe(take(1))
-      .subscribe(courses => this._courses$.next([...courses, {...course, id: courses.length + 1}]));      
+  create(payload: Course): void {
+    this.apiService
+      .create('courses', payload)
+      .subscribe({
+        next: () => {
+          this.load();
+          this.notifierService.toastSuccessNotification('Operación exitosa!');
+        },
+        error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
+      });
   }
 
-  update(newCourse: Course): void {
-    this._courses$
-      .pipe(take(1))
-      .subscribe(courses => {
-        this._courses$.next(
-          courses.map((course) => {
-            return course.id === newCourse.id ? {...course, ...newCourse} : course}
-          )
-        )});
+  update(id: number | string, payload: Course): void {
+    this.apiService
+    .updateById('courses', id, payload)
+    .subscribe({
+      next: () => {
+        this.load();
+        this.notifierService.toastSuccessNotification('Operación exitosa!');
+      },
+      error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
+    });
   }
 
   deleteById(courseId: number): void {
-    this._courses$
-      .pipe(take(1))
-      .subscribe(courses => this._courses$.next(
-        courses.filter(course => course.id !== courseId)
-      ));
+    this.apiService
+      .deleteById('courses', courseId)
+      .subscribe({
+        next: () => {
+          this.load();
+          this.notifierService.toastSuccessNotification('Operación exitosa!');
+        },
+        error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
+      });
   }
 }

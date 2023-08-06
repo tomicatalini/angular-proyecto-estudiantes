@@ -8,7 +8,7 @@
 <section class="grid grid-nogutter mx-3">
     <button mat-raised-button 
         color="primary"
-        (click)="createUserDialog()">Nuevo Curso</button>
+        (click)="createCourseDialog()">Nuevo Curso</button>
 
         <app-course-table class="col-12 my-3" 
             [dataSource]="(dataSource$ | async) || []" 

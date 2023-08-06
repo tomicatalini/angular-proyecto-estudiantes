@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, take, map } from 'rxjs';
+import { BehaviorSubject, Observable, take } from 'rxjs';
 import { User } from './models/models';
-import { UserMockService } from './mock/user-mock.service';
+import { ApiService } from 'src/app/core/services/api.service';
+import { CustomNotifierService } from 'src/app/core/services/custom-notifier.service';
+import { generateRandomString } from 'src/app/shared/utils/helpers';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,8 @@ export class UserService {
   private _users$ = new BehaviorSubject<User[]>([]);
 
   constructor(
-    private userMockService: UserMockService
+    private apiService: ApiService<User>,
+    private notifierService: CustomNotifierService
   ) {}
 
   getAll(): Observable<User[]> {
@@ -19,41 +22,54 @@ export class UserService {
   }
 
   getById(userId: number): Observable<User | undefined> {
-    return this._users$
-      .pipe(
-        take(1),
-        map((users) => {
-          return users.find(user => user.id === userId)
-        })        
-      );
+    return this.apiService.getById('users', userId).pipe(take(1));
   }
 
-  load(): void{
-    this._users$.next(this.userMockService.getUsers());
+  load(): void {
+    this.apiService
+      .getAll('users')
+      .subscribe({
+        next: (users) => {
+          this._users$.next(users)
+        },
+        error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
+      })
   }
 
-  create(user: User): void {
-    this._users$
-      .pipe(take(1))
-      .subscribe(users => this._users$.next([...users, {...user, id: users.length + 1}]));      
+  create(payload: User): void {
+    const token = generateRandomString(20);
+    this.apiService
+      .create('users', {...payload, token: token})
+      .subscribe({
+        next: () => {
+          this.load();
+          this.notifierService.toastSuccessNotification('Operación exitosa!');
+        },
+        error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
+      });
   }
 
-  update(newUser: User): void {
-    this._users$
-      .pipe(take(1))
-      .subscribe(users => {
-        this._users$.next(
-          users.map((user) => {
-            return user.id === newUser.id ? {...user, ...newUser} : user}
-          )
-        )});
+  update(id: number | string, payload: User): void {
+    this.apiService
+    .updateById('users', id, payload)
+    .subscribe({
+      next: () => {
+        this.load();
+        this.notifierService.toastSuccessNotification('Operación exitosa!');
+      },
+      error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
+    });
   }
 
   deleteById(userId: number): void {
-    this._users$
-      .pipe(take(1))
-      .subscribe(users => this._users$.next(
-        users.filter(user => user.id !== userId)
-      ));
+    this.apiService
+      .deleteById('users', userId)
+      .subscribe({
+        next: () => {
+          this.load();
+          this.notifierService.toastSuccessNotification('Operación exitosa!');
+        },
+        error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
+      });
   }
 }
