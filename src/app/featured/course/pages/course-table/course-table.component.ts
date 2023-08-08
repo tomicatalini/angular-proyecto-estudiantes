@@ -18,6 +18,10 @@ export class CourseTableComponent {
   @Output()
   courseDelete = new EventEmitter<Course>();
 
+  @Input() canEdit: boolean = true;
+  @Input() canDelete: boolean = true;
+  @Input() canView: boolean = true;
+
   constructor(){}
 
   edit(value: Course): void{

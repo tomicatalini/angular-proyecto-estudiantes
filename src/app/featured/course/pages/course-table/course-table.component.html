@@ -23,13 +23,13 @@
     <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Acciones </th>
         <td mat-cell *matCellDef="let course">
-            <button mat-icon-button [routerLink]="course.id" color="primary">
+            <button mat-icon-button *ngIf="canView" [routerLink]="course.id" color="primary">
                 <mat-icon>visibility</mat-icon>
             </button>
-            <button mat-icon-button color="primary" (click)="edit(course)">
+            <button mat-icon-button *ngIf="canEdit" color="primary" (click)="edit(course)">
                 <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button color="warn" (click)="delete(course)">
+            <button mat-icon-button *ngIf="canDelete" color="warn" (click)="delete(course)">
                 <mat-icon>delete</mat-icon>
             </button>
         </td>

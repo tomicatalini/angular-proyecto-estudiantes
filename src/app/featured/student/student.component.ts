@@ -23,7 +23,8 @@ export class StudentComponent {
     this.dataSource$ = this.studentService
       .getStudents()
       .pipe(
-        map((students) => students.map( s => ({
+        map((students) => 
+        students.map( s => ({
           ...s,
           name: s.name.toUpperCase(),
           surname: s.surname.toUpperCase()

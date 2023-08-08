@@ -1,70 +1,72 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, take } from 'rxjs';
-import { Course } from './model/model';
+import { Inscription } from './models/models';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CustomNotifierService } from 'src/app/core/services/custom-notifier.service';
+import { Relationship } from '../../core/services/api.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CourseService {
+export class InscriptionService {
 
-  private _courses$ = new BehaviorSubject<Course[]>([]);
+  private _inscriptions$ = new BehaviorSubject<Inscription[]>([]);
 
   constructor(
-    private apiService: ApiService<Course>,
+    private apiService: ApiService<Inscription>,
     private notifierService: CustomNotifierService
-  ) {}
+  ) { }
 
-  getSubscription(): Observable<Course[]> {
-    return this._courses$.asObservable();
+  getSubscription(): Observable<Inscription[]> {
+    return this._inscriptions$.asObservable();
   }
 
-  getById(courseId: number): Observable<Course | undefined> {
-    return this.apiService.getById('courses', courseId).pipe(take(1));
+  getById(inscriptionId: number): Observable<Inscription | undefined> {
+    return this.apiService.getById('inscriptions', inscriptionId).pipe(take(1));
   }
 
-  getAll(): void {
+  getAll(param?: any): void {
+
     this.apiService
-      .getAll('courses')
+      .getAll('inscriptions', {type: 'parent', name:'course'}, param)
       .subscribe({
-        next: (courses) => {
-          this._courses$.next(courses)
+        next: (inscriptions) => {
+          this._inscriptions$.next(inscriptions)
         },
         error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
       })
   }
 
-  create(payload: Course): void {
+  create(payload: Inscription): void {
     this.apiService
-      .create('courses', payload)
+      .create('inscriptions', payload)
       .subscribe({
         next: () => {
-          this.getAll();
+          this.getAll({studentId: payload.id});
           this.notifierService.toastSuccessNotification('Operación exitosa!');
         },
         error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
       });
   }
 
-  update(id: number | string, payload: Course): void {
+  update(id: number | string, payload: Inscription): void {
     this.apiService
-    .updateById('courses', id, payload)
+    .updateById('inscriptions', id, payload)
     .subscribe({
       next: () => {
-        this.getAll();
+        this.getAll({studentId: payload.id});
         this.notifierService.toastSuccessNotification('Operación exitosa!');
       },
       error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
     });
   }
 
-  deleteById(courseId: number): void {
+  deleteById(inscriptionId: number | string): void {
     this.apiService
-      .deleteById('courses', courseId)
+      .deleteById('inscriptions', inscriptionId)
       .subscribe({
         next: () => {
-          this.getAll();
+          this.getAll('inscriptions');
           this.notifierService.toastSuccessNotification('Operación exitosa!');
         },
         error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')

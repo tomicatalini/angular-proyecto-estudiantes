@@ -1,5 +1,4 @@
-import { Course } from "../../course/model/model"
-import { Subject } from "../../subject/model/models"
+import { Inscription } from "../../inscription/models/models"
 
 export interface Student {
     id: number,
@@ -9,11 +8,4 @@ export interface Student {
     email: string,
     birthdate?: Date,
     inscriptions?: Inscription[]
-}
-
-export interface Inscription {
-    id: number,
-    student: Student,
-    course: Course,
-    subject: Subject //?
 }

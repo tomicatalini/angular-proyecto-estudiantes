@@ -25,7 +25,7 @@ export class StudentService {
       .subscribe(students => this.students$.next(students));
   }
 
-  getStudentById(id: number): Observable<Student | undefined> {
+  getStudentById(id: number | string): Observable<Student | undefined> {
     return this.apiService.getById('students', id).pipe(take(1));
   }
 

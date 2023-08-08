@@ -1,8 +1,12 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
-const api_path = 'http://localhost:3000';
+export interface Relationship {
+  type: 'child' | 'parent',
+  name: string
+} 
 
 @Injectable({
   providedIn: 'root'
@@ -14,23 +18,30 @@ export class ApiService<T> {
   ) {}
   
   getById(entity: string, id: string | number) {
-    return this.httpClient.get<T>(`${api_path}/${entity}/${id}`).pipe(catchError(this.handlerError));
+    return this.httpClient.get<T>(`${environment.baseApiUrl}/${entity}/${id}`).pipe(catchError(this.handlerError));
   }
 
-  getAll(entity: string): Observable<T[]> {
-    return this.httpClient.get<T[]>(`${api_path}/${entity}`).pipe(catchError(this.handlerError));
+  getAll(entity: string, relationship?: Relationship, params?: any): Observable<T[]> {
+    let relationshipUrl = '';
+
+    if(relationship){
+      relationshipUrl = (relationship.type === 'child' ? '?_embed=' : '?_expand=') + relationship.name;
+      return this.httpClient.get<T[]>(`${environment.baseApiUrl}/${entity}${relationshipUrl}`, {params}).pipe(catchError(this.handlerError));
+    }
+
+    return this.httpClient.get<T[]>(`${environment.baseApiUrl}/${entity}`, {params}).pipe(catchError(this.handlerError));
   }
 
   create(entity: string, body: T): Observable<T> {
-    return this.httpClient.post<T>(`${api_path}/${entity}`, body).pipe(catchError(this.handlerError));
+    return this.httpClient.post<T>(`${environment.baseApiUrl}/${entity}`, body).pipe(catchError(this.handlerError));
   }
 
   updateById(entity: string, id: string | number, body: T): Observable<T> {
-    return this.httpClient.put<T>(`${api_path}/${entity}/${id}`, body).pipe(catchError(this.handlerError));
+    return this.httpClient.put<T>(`${environment.baseApiUrl}/${entity}/${id}`, body).pipe(catchError(this.handlerError));
   }
 
   deleteById(entity: string, id: string | number): Observable<T> {
-    return this.httpClient.delete<T>(`${api_path}/${entity}/${id}`).pipe(catchError(this.handlerError));
+    return this.httpClient.delete<T>(`${environment.baseApiUrl}/${entity}/${id}`).pipe(catchError(this.handlerError));
   }
 
   private handlerError(error: HttpErrorResponse) {

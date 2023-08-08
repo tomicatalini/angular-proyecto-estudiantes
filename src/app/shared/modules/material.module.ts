@@ -17,6 +17,8 @@ import {MatNativeDateModule} from '@angular/material/core';
 import {LayoutModule} from '@angular/cdk/layout';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatCardModule} from '@angular/material/card';
+import {MatSelectModule} from '@angular/material/select';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [],
@@ -38,7 +40,9 @@ import {MatCardModule} from '@angular/material/card';
     MatNativeDateModule,
     LayoutModule,
     MatRadioModule,
-    MatCardModule
+    MatCardModule,
+    MatSelectModule,
+    MatAutocompleteModule
   ]
 })
 export class MaterialModule { }

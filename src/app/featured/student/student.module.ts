@@ -11,6 +11,8 @@ import { StudentMockService } from './mock/student-mock.service';
 import { StudentDetailComponent } from './components/student-detail/student-detail.component';
 import { RouterModule } from '@angular/router';
 import { StudentRoutingModule } from './student-routing.module';
+import { InscriptionModule } from '../inscription/inscription.module';
+import { CourseModule } from '../course/course.module';
 
 
 
@@ -29,6 +31,8 @@ import { StudentRoutingModule } from './student-routing.module';
     ReactiveFormsModule,
     SharedModule,
     RouterModule,
+    InscriptionModule,
+    CourseModule
   ],
   exports:[
     StudentComponent,

@@ -18,11 +18,11 @@ export class CourseComponent {
     public dialog: MatDialog,
     private courseService: CourseService
   ){    
-    this.dataSource$ = this.courseService.getAll();
+    this.dataSource$ = this.courseService.getSubscription();
   }
 
   ngOnInit(): void {
-    this.courseService.load();
+    this.courseService.getAll();
   }
 
   edit(course: Course): void{

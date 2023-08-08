@@ -44,6 +44,38 @@
       "registerDate": "2023-08-02T23:08:04.327Z"
     }
   ],
-  "courses": [],
-  "subjects": []
+  "courses": [
+    {
+      "id": 1,
+      "name": "Angular",
+      "startDate": "2023-04-03T03:00:00.000Z",
+      "endDate": "2023-08-04T03:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "name": "React JS",
+      "startDate": "2023-08-01T03:00:00.000Z",
+      "endDate": "2023-08-31T03:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "name": "View",
+      "startDate": "2023-08-01T03:00:00.000Z",
+      "endDate": "2023-08-31T03:00:00.000Z"
+    },
+    {
+      "id": 6,
+      "name": "Mongo DB",
+      "startDate": "2023-07-04T03:00:00.000Z",
+      "endDate": "2023-09-21T03:00:00.000Z"
+    }
+  ],
+  "subjects": [],
+  "inscriptions": [
+    {
+      "id": 1,
+      "studentId": 1,
+      "courseId": 1
+    }
+  ]
 }
