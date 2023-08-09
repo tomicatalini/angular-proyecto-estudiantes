@@ -30,4 +30,9 @@ export class LoginComponent {
       this.authService.login(this.authForm.getRawValue());
     }
   }
+
+  onKeyEnter(event: Event) {
+    event.preventDefault();
+    this.login();
+  }
 }

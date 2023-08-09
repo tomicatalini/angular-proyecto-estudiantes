@@ -3,14 +3,14 @@
     <form [formGroup]="authForm" class="p-6 grid grid-nogutter shadow-4 border-round-lg">
         <mat-form-field appearance="outline" class="col-12">
             <mat-label>Correo Electrónico</mat-label>
-            <input matInput formControlName="email" type="email">
+            <input matInput formControlName="email" type="email" (keydown.enter)="onKeyEnter($event)">
             <mat-error *ngFor="let error of emailControl.errors | keyvalue">{{ error | formControlError: 'Correo Electrónico' }}</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline" class="col-12">
             <mat-label>Contraseña</mat-label>
-            <input matInput formControlName="pass" [type]="showPass ? 'text' :'password'">
+            <input matInput formControlName="pass" [type]="showPass ? 'text' :'password'" (keydown.enter)="onKeyEnter($event)">
             <button mat-icon-button matSuffix (click)="showPass = !showPass">
-            <mat-icon>{{showPass ? 'visibility_off' : 'visibility'}}</mat-icon>
+                <mat-icon>{{showPass ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
             <mat-error *ngFor="let error of passControl.errors | keyvalue">{{ error | formControlError: 'Contraseña' }}</mat-error>
         </mat-form-field>
