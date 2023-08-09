@@ -1,42 +1,51 @@
-<h1>Detalle del Estudiante</h1>
-<div class="my-4 flex flex-grow justify-content-end gap-2">
-    <button mat-raised-button *ngIf="!updateMode" color="accent" (click)="enableUpdate()">Habilitar edición</button>
-    <button mat-raised-button *ngIf="updateMode" color="primary" (click)="update()">Aceptar</button>
-    <button mat-raised-button color="warn">Eliminar</button>
-</div>
-<form [formGroup]="studentForm" class="grid grid-nogutters">
-    <mat-form-field appearance="outline" class="col-1">
-        <mat-label>#</mat-label>
-        <input matInput formControlName="id" type="text">
-        <mat-error *ngFor="let error of nameControl.errors | keyvalue">{{ error | formControlError: 'Id' }}</mat-error>
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="col-5">
-        <mat-label>Nombre</mat-label>
-        <input matInput formControlName="name" type="text">
-        <mat-error *ngFor="let error of nameControl.errors | keyvalue">{{ error | formControlError: 'Nombre' }}</mat-error>
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="col-6">
-        <mat-label>Apellido</mat-label>
-        <input matInput formControlName="surname" type="text">
-        <mat-error *ngFor="let error of surnameControl.errors | keyvalue">{{ error | formControlError: 'Apellido' }}</mat-error>
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="col-12">
-        <mat-label>Correo Electrónico</mat-label>
-        <input matInput formControlName="email" type="email">
-        <mat-error *ngFor="let error of emailControl.errors | keyvalue">{{ error | formControlError: 'Correo Electrónico' }}</mat-error>
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="col-12">
-        <mat-label>Fecha de Nacimiento</mat-label>
-        <input matInput formControlName="birthdate" [matDatepicker]="picker">
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-        <mat-error *ngFor="let error of birthdateControl.errors | keyvalue">{{ error | formControlError: 'Fecha de Nacimiento' }}</mat-error>
-    </mat-form-field>
-</form>
-
-
-<button mat-raised-button color="primary" (click)="assignCourse()">Asignar Curso</button>
-
-
-
-<app-inscription-table [dataSource]="(studenInscription$ | async) || []" [canView]="false" [canEdit]="false" (inscriptionDelete)="inscriptionTableDelete($event)"></app-inscription-table>
+<section>
+    <header class="m-1 flex flex-row align-items-center justify-content-between">
+        <h2>Datos del Estudiante</h2>
+        <div class="flex flex-grow justify-content-end gap-2">
+            <button mat-raised-button *ngIf="!updateMode" color="accent" (click)="enableUpdate()">Habilitar edición</button>
+            <button mat-raised-button *ngIf="updateMode" color="primary" (click)="update()">Aceptar</button>
+            <button mat-raised-button color="warn" (click)="delete()">Eliminar</button>
+        </div>
+    </header>
+    <form [formGroup]="studentForm" class="grid grid-nogutters">
+        <mat-form-field appearance="outline" class="col-1">
+            <mat-label>#</mat-label>
+            <input matInput formControlName="id" type="text">
+            <mat-error *ngFor="let error of nameControl.errors | keyvalue">{{ error | formControlError: 'Id' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-5">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="name" type="text">
+            <mat-error *ngFor="let error of nameControl.errors | keyvalue">{{ error | formControlError: 'Nombre' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-6">
+            <mat-label>Apellido</mat-label>
+            <input matInput formControlName="surname" type="text">
+            <mat-error *ngFor="let error of surnameControl.errors | keyvalue">{{ error | formControlError: 'Apellido' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Correo Electrónico</mat-label>
+            <input matInput formControlName="email" type="email">
+            <mat-error *ngFor="let error of emailControl.errors | keyvalue">{{ error | formControlError: 'Correo Electrónico' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Fecha de Nacimiento</mat-label>
+            <input matInput formControlName="birthdate" [matDatepicker]="picker">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngFor="let error of birthdateControl.errors | keyvalue">{{ error | formControlError: 'Fecha de Nacimiento' }}</mat-error>
+        </mat-form-field>
+    </form>
+</section>
+<section>
+    <header class="m-1 flex flex-row align-items-center justify-content-between">
+        <h2>Gestion de Cursos</h2>
+        <button mat-raised-button color="primary" (click)="assignCourse()">Asignar Curso</button>    
+    </header>
+    <app-inscription-table [dataSource]="(studenInscription$ | async) || []" 
+        [canView]="false" 
+        [canEdit]="false"
+        class="grid grid-nogutters mx-1" 
+        (inscriptionDelete)="inscriptionTableDelete($event)">
+    </app-inscription-table>
+</section>

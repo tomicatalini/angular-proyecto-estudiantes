@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Inscription } from '../../models/models';
 
 @Component({
@@ -7,7 +7,7 @@ import { Inscription } from '../../models/models';
   styleUrls: ['./inscription-table.component.scss']
 })
 export class InscriptionTableComponent {
-  displayedColumns: string[] = ['id', 'course', 'actions'];
+  displayedColumns: string[] = ['id', 'courseId', 'course', 'actions'];
 
   @Input()
   dataSource: Inscription[] = [];
@@ -22,9 +22,7 @@ export class InscriptionTableComponent {
   @Input() canDelete: boolean = true;
   @Input() canView: boolean = true;
 
-  constructor(){
-    console.log(this.dataSource);
-  }
+  constructor(){}
 
   edit(value: Inscription): void{
     this.inscriptionEdit.emit(value);

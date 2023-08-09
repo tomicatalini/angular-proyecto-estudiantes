@@ -40,7 +40,6 @@ export class AuthService {
     })
     .subscribe({
       next: (response) => {
-        console.log(response);
         if(response.length){
           const user = response[0];
 

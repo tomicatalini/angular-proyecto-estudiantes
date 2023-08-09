@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Student } from './model/student';
-import { BehaviorSubject, Observable, take, map, mergeMap } from 'rxjs';
+import { BehaviorSubject, Observable, take, map, mergeMap, of, finalize, catchError } from 'rxjs';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CustomNotifierService } from '../../core/services/custom-notifier.service';
 
@@ -47,10 +47,22 @@ export class StudentService {
       });
   }  
 
-  updateStudent(id: string | number, payload: Student): void {
-    this.apiService
+  updateStudent(id: string | number, payload: Student): Observable<boolean> {
+
+    return this.apiService
       .updateById('students', id, payload)
-      .subscribe(() => this.loadStudents());    
+      .pipe(
+        map(() => true),
+        finalize(() => {
+          this.loadStudents();
+          this.notifierService.toastSuccessNotification('La actualización se realizó correctamente', 1000)
+        }),
+        catchError(() => of(false))
+      );
+      // .subscribe({
+      //   next: () => this.loadStudents(),
+      //   error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación..')
+      // });    
   }
 
   deleteStudentById(id: number): void {

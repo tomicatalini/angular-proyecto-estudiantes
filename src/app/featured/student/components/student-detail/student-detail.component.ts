@@ -8,7 +8,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { InscriptionService } from '../../../inscription/inscription.service';
 import { Course } from 'src/app/featured/course/model/model';
 import { Inscription } from 'src/app/featured/inscription/models/models';
-import { Observable, finalize, take } from 'rxjs';
+import { Observable, finalize, pipe, take, tap } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-student-detail',
@@ -32,8 +33,8 @@ export class StudentDetailComponent implements OnInit{
   }); 
 
   student: Student | undefined = undefined;
-  studenCourses$ = new Observable<Course[]>;
   studenInscription$ = new Observable<Inscription[]>;
+  courses: (number | string)[] = [];
 
   updateMode: boolean = false;
 
@@ -44,7 +45,7 @@ export class StudentDetailComponent implements OnInit{
     private router: Router,
     public dialog: MatDialog,    
   ){
-    this.studenInscription$ =this.inscriptionService.getSubscription();
+    this.studenInscription$ =this.inscriptionService.getSubscription().pipe(tap(inscriptions => this.courses = inscriptions.map(insc => insc.courseId)));
   }
 
   ngOnInit(): void {
@@ -72,8 +73,10 @@ export class StudentDetailComponent implements OnInit{
   }
 
   assignCourse(){
+    let inscription = {id: null, studentId: this.student?.id, courseId: null};
+
     this.dialog
-      .open(InscriptionDialogFormComponent, {data: {id: null, studentId: this.student?.id, courseId: null}})
+      .open(InscriptionDialogFormComponent, {data: {inscription, courses: this.courses}})
       .afterClosed()
       .pipe(take(1))
       .subscribe( (course: Course) => {
@@ -96,12 +99,39 @@ export class StudentDetailComponent implements OnInit{
 
   update(){
     this.updateMode = false;
-    this.studentForm.disable();
+    this.studentService
+      .updateStudent(Number(this.student?.id), this.studentForm.getRawValue())
+      .subscribe({
+        next: (isUpdated) => {
+          if(isUpdated){
+            this.student = this.studentForm.getRawValue() as Student;
+          } else {
+            this.studentForm.patchValue(this.student!);
+          }
+        },
+        complete: () => this.studentForm.disable()
+      });
+  }
+
+  delete(){
+    Swal.fire({
+      icon: 'error',
+      title: 'Eliminar Estudiante',
+      text: `¿Desea eliminar el estudiante ${this.student?.name} ${this.student?.surname}?`,
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then(res => {
+      if(res.isConfirmed){
+        this.studentService.deleteStudentById(Number(this.student?.id));
+        this.router.navigate(['dashboard', 'student']);
+      }
+    });
   }
   
   inscriptionTableDelete(inscription: Inscription): void{    
     if(inscription){
-      this.inscriptionService.deleteById(inscription.id!);
+      this.inscriptionService.delete(inscription);
     }
   }
 }

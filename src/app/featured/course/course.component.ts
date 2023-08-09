@@ -33,7 +33,6 @@ export class CourseComponent {
         takeUntil(this.destroyed)
       )
       .subscribe( (edited: Course) => {
-        console.log(edited);
         if(edited){
           this.courseService.update(course.id, edited);
         }

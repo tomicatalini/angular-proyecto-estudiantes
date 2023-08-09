@@ -33,7 +33,6 @@ export class SubjectComponent {
         takeUntil(this.destroyed)
       )
       .subscribe( (edited: Subject) => {
-        console.log(edited);
         if(edited){
           this.subjectService.update(subject.id, edited);
         }

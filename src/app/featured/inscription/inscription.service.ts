@@ -3,7 +3,6 @@ import { BehaviorSubject, Observable, take } from 'rxjs';
 import { Inscription } from './models/models';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CustomNotifierService } from 'src/app/core/services/custom-notifier.service';
-import { Relationship } from '../../core/services/api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +30,7 @@ export class InscriptionService {
       .getAll('inscriptions', {type: 'parent', name:'course'}, param)
       .subscribe({
         next: (inscriptions) => {
-          this._inscriptions$.next(inscriptions)
+          this._inscriptions$.next(inscriptions);
         },
         error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
       })
@@ -42,7 +41,7 @@ export class InscriptionService {
       .create('inscriptions', payload)
       .subscribe({
         next: () => {
-          this.getAll({studentId: payload.id});
+          this.getAll({studentId: payload.studentId});
           this.notifierService.toastSuccessNotification('Operación exitosa!');
         },
         error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
@@ -54,7 +53,19 @@ export class InscriptionService {
     .updateById('inscriptions', id, payload)
     .subscribe({
       next: () => {
-        this.getAll({studentId: payload.id});
+        this.getAll({studentId: payload.studentId});
+        this.notifierService.toastSuccessNotification('Operación exitosa!');
+      },
+      error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
+    });
+  }
+
+  delete(payload: Inscription){
+    this.apiService
+    .deleteById('inscriptions', payload.id!)
+    .subscribe({
+      next: () => {
+        this.getAll({studentId: payload.studentId});
         this.notifierService.toastSuccessNotification('Operación exitosa!');
       },
       error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
@@ -66,7 +77,7 @@ export class InscriptionService {
       .deleteById('inscriptions', inscriptionId)
       .subscribe({
         next: () => {
-          this.getAll('inscriptions');
+          this.getAll();
           this.notifierService.toastSuccessNotification('Operación exitosa!');
         },
         error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')

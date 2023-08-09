@@ -22,14 +22,14 @@ export class CustomNotifierService {
     this._notifier$.next({icon: 'error', title, text});
   }
 
-  toastSuccessNotification(message: string): void {
+  toastSuccessNotification(message: string, timer?: number): void {
     this._toastNotifier$.next({
       position: 'top-end',
       icon: 'success',
       title: message,
       showConfirmButton: false,
       toast: true,
-      timer: 2500,
+      timer: timer || 2500,
       timerProgressBar: true
     });
   }
