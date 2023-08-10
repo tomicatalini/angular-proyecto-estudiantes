@@ -4,12 +4,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { Student } from '../../model/student';
 
 describe('StudentDialogForm', () => {
     let component: StudentDialogFormComponent;
+
+    const dialogMock ={
+        close:(dialogMockResukt?: any) => {},
+    }
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -23,13 +27,17 @@ describe('StudentDialogForm', () => {
                 MatNativeDateModule
             ],
             providers: [
-                {provide: MatDialogRef<StudentDialogFormComponent>, useValue: {}},
-                {provide: MAT_DIALOG_DATA, useValue: [{}]},
+                {provide: MatDialogRef<StudentDialogFormComponent>, useValue: dialogMock},
+                {provide: MAT_DIALOG_DATA, useValue: []},
             ]
         });
 
         component = TestBed.createComponent(StudentDialogFormComponent).componentInstance;
     });
+
+    it('should be created', () => {
+        expect(component).toBeTruthy();
+    });    
 
     it('StudentForm should be invalid if required fields are blank', () => {
         component.idControl.setValue(null);
@@ -39,35 +47,65 @@ describe('StudentDialogForm', () => {
         component.emailControl.setValue('');
 
         expect(component.studentForm.invalid).toBeTruthy();
-    })
+    });
 
     it('NameControl should be valid if it length is greater or equal than four (4)', () => {
         component.nameControl.setValue('tomi');
 
         expect(component.nameControl.value?.length).toBeGreaterThanOrEqual(4);
-    })
+    });
 
-    it('Close method sould verify if StudentForm is valid, then should send StudentForm value', () => {
-        const student: Student = {
+    it('Emails should have a valid pattern if needed', () => {
+
+        const controls = component.studentForm.controls;
+        const emailsControls: AbstractControl[] = [];
+        const validEmail = 'valid@example.com'
+        const invalidEmail = 'invalid.com'
+
+        for(let controlKey in controls){
+            let control: AbstractControl = controls[controlKey];
+
+            if(control.hasValidator(Validators.email)){
+                emailsControls.push(control);
+            }
+        }
+
+        //Verifica si un mail es valido.
+        for(let control of emailsControls){
+            control.setValue(validEmail);
+            expect(control.valid).toBeTruthy();
+        }
+
+        //Verifica si un mail es invalido.
+        for(let control of emailsControls){
+            control.setValue(invalidEmail);
+            expect(control.invalid).toBeTruthy();
+        }
+    });
+
+    it('Close method sould verify if StudentForm is valid, then should send StudentForm value with register date', () => {      
+
+        const validMockStudent: Student = {
             id: 1,
             name: 'Tomi',
             surname: 'Catalini',
-            birthdate: new Date(),
+            birthdate: new Date(1995,2,11),
             email: 'tomi@catalini.com',
-            registerDate: new Date()
+            registerDate: new Date(2023,3,2),
         };
 
-        component.idControl.setValue(student.id);
-        component.nameControl.setValue(student.name);
-        component.surnameControl.setValue(student.surname);
-        component.birthdateControl.setValue(student.birthdate);
-        component.emailControl.setValue(student.email);
+        component.idControl.setValue(validMockStudent.id);
+        component.nameControl.setValue(validMockStudent.name);
+        component.surnameControl.setValue(validMockStudent.surname);
+        component.birthdateControl.setValue(validMockStudent.birthdate);
+        component.emailControl.setValue(validMockStudent.email);
         
         expect(component.studentForm.valid).toBeTruthy();
 
-        component.close();
         const spyOfDialogRefClose = spyOn(component.dialogRef, 'close');
-        // expect(spyOfDialogRefClose).toHaveBeenCalledWith({...component.studentForm.value, registerDate: student.registerDate});
-        expect(spyOfDialogRefClose).toHaveBeenCalled();
+
+        component.close();
+
+        expect(spyOfDialogRefClose).toHaveBeenCalledWith({...validMockStudent, registerDate: new Date()});
     })
 })

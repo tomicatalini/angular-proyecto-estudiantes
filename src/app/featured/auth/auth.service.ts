@@ -40,7 +40,7 @@ export class AuthService {
     })
     .subscribe({
       next: (response) => {
-        if(response.length){
+        if(response && response.length){
           const user = response[0];
 
           localStorage.setItem('token', user.token);
