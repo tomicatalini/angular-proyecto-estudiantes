@@ -9,11 +9,11 @@ import { Student } from '../../model/student';
   styleUrls: ['./student-dialog-form.component.scss']
 })
 export class StudentDialogFormComponent {
-  idControl = new FormControl(null);
-  nameControl= new FormControl(null, [Validators.required, Validators.minLength(4)]);
-  surnameControl= new FormControl(null, [Validators.required]);
-  birthdateControl= new FormControl(null);
-  emailControl= new FormControl(null, [Validators.required, Validators.email]);
+  idControl = new FormControl<number | null>(null);
+  nameControl= new FormControl<string | null>(null, [Validators.required, Validators.minLength(4)]);
+  surnameControl= new FormControl<string | null>(null, [Validators.required]);
+  birthdateControl = new FormControl<Date | undefined | null>(null);
+  emailControl= new FormControl<string | null>(null, [Validators.required, Validators.email]);
 
   studentForm: FormGroup = new FormGroup({
     id: this.idControl,
