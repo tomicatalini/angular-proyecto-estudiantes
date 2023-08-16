@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { take } from 'rxjs';
 import { AuthService } from 'src/app/featured/auth/auth.service';
 import Swal from 'sweetalert2';
 
@@ -15,10 +15,15 @@ export class ToolbarComponent {
   @Output()
   sidenavChange = new  EventEmitter<boolean>();
 
+  userNameInitials = '';
+
   constructor(
-    private router: Router,
     private authService: AuthService
-  ){}
+  ){
+    this.authService.authUser$
+      .pipe(take(1))
+      .subscribe(user => this.userNameInitials = `${user?.name[0].toUpperCase()} ${user?.surname[0].toUpperCase()}`);
+  }
 
   sidenavToggle(){
     this.sidenav = !this.sidenav;
