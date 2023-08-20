@@ -6,18 +6,19 @@ import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
 import { CustomNotifierService } from 'src/app/core/services/custom-notifier.service';
 import { Auth } from './models/models';
+import { Store } from '@ngrx/store';
+import { AuthActions } from 'src/app/store/auth/auth.actions';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private _authUser$ = new BehaviorSubject<User | null>(null);
-  public authUser$ = this._authUser$.asObservable();
 
   constructor(
     private httpClient: HttpClient,
     private router: Router,
-    private notifier: CustomNotifierService
+    private notifier: CustomNotifierService,
+    private store: Store
   ) { }
 
   isAuthenticated(): Observable<boolean> {
@@ -27,7 +28,12 @@ export class AuthService {
         }
       })
       .pipe(
-        map((users) => !!users.length)
+        map((users) => {
+          if(users && users.length){
+            this.store.dispatch(AuthActions.setAuthUser({ payload: users[0] }));
+          }
+          return !!users.length;
+        })
       );
   }
 
@@ -45,11 +51,11 @@ export class AuthService {
 
           localStorage.setItem('token', user.token);
 
-          this._authUser$.next(user);
+          this.store.dispatch(AuthActions.setAuthUser({ payload: user }));
           this.router.navigate(['/dashboard']);
         } else {
           this.notifier.errorNotification('Email o contraseña invalida');
-          this._authUser$.next(null);
+          this.store.dispatch(AuthActions.setAuthUser({ payload: null }));
         }
       },
       error: (err) => {
@@ -67,7 +73,6 @@ export class AuthService {
   }
 
   logout(){
-    localStorage.removeItem('token');
-    this.router.navigate(['/auth/login']);
+    this.store.dispatch(AuthActions.setAuthUser({ payload: null }));    
   }
 }

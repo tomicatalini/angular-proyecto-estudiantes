@@ -1,6 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { take } from 'rxjs';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable, take } from 'rxjs';
 import { AuthService } from 'src/app/featured/auth/auth.service';
+import { User } from 'src/app/featured/user/models/models';
+import { selectAuthUser } from 'src/app/store/auth/auth.selectors';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -16,13 +20,14 @@ export class ToolbarComponent {
   sidenavChange = new  EventEmitter<boolean>();
 
   userNameInitials = '';
+  user$: Observable< User | null>;
 
   constructor(
-    private authService: AuthService
-  ){
-    this.authService.authUser$
-      .pipe(take(1))
-      .subscribe(user => this.userNameInitials = `${user?.name[0].toUpperCase()} ${user?.surname[0].toUpperCase()}`);
+    private store: Store,
+    private authService: AuthService,
+    private router: Router
+  ){    
+    this.user$ = this.store.select(selectAuthUser);
   }
 
   sidenavToggle(){
@@ -41,6 +46,7 @@ export class ToolbarComponent {
     }).then(res => {
       if(res.isConfirmed){
        this.authService.logout();
+       this.router.navigate(['/auth/login']);
       }
     });
   }
