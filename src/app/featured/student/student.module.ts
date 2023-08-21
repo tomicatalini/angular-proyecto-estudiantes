@@ -13,6 +13,10 @@ import { RouterModule } from '@angular/router';
 import { StudentRoutingModule } from './student-routing.module';
 import { InscriptionModule } from '../inscription/inscription.module';
 import { CourseModule } from '../course/course.module';
+import { EffectsModule } from '@ngrx/effects';
+import { StudentEffects } from './store/student.effects';
+import { StoreModule } from '@ngrx/store';
+import { studentFeature } from './store/student.reducer';
 
 
 
@@ -32,7 +36,9 @@ import { CourseModule } from '../course/course.module';
     SharedModule,
     RouterModule,
     InscriptionModule,
-    CourseModule
+    CourseModule,
+    StoreModule.forFeature(studentFeature),
+    EffectsModule.forFeature([StudentEffects]),
   ],
   exports:[
     StudentComponent,

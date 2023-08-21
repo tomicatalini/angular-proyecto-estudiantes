@@ -21,11 +21,10 @@ export class ApiService<T> {
     return this.httpClient.get<T>(`${environment.baseApiUrl}/${entity}/${id}`).pipe(catchError(this.handlerError));
   }
 
-  getAll(entity: string, relationship?: Relationship, params?: any): Observable<T[]> {
-    let relationshipUrl = '';
+  getAll(entity: string, relationships?: Relationship[], params?: any): Observable<T[]> {
 
-    if(relationship){
-      relationshipUrl = (relationship.type === 'child' ? '?_embed=' : '?_expand=') + relationship.name;
+    if(relationships && relationships.length){
+      let relationshipUrl = this.createRelationshipQueryParams(relationships);
       return this.httpClient.get<T[]>(`${environment.baseApiUrl}/${entity}${relationshipUrl}`, {params}).pipe(catchError(this.handlerError));
     }
 
@@ -52,5 +51,16 @@ export class ApiService<T> {
     }
 
     return throwError('Error en la comunicación http de la API-JsonServer');
+  }
+  
+  private createRelationshipQueryParams(relationships: Relationship[]): string{
+    let result = '?';
+
+    relationships.forEach( (rel) => {
+      result += rel.type === 'child' ? '_embed' : '_expand';
+      result += `=${rel.name}&`;
+    });
+
+    return result.substring(0, result.length-1);
   }
 }

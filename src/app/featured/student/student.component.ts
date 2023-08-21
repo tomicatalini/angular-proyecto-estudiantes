@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
-import { Observable, Subject, map, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { Student } from './model/student';
 import { MatDialog } from '@angular/material/dialog';
-import { StudentService } from './student.service';
 import { StudentDialogFormComponent } from './components/student-dialog-form/student-dialog-form.component';
+import { Store } from '@ngrx/store';
+import { StudentActions } from './store/student.actions';
+import { selectStudents } from './store/student.selectors';
+import { CustomNotifierService } from 'src/app/core/services/custom-notifier.service';
 
 @Component({
   selector: 'app-student',
@@ -16,21 +19,14 @@ export class StudentComponent {
   
   constructor(
     public dialog: MatDialog,
-    private studentService: StudentService
-  ){    
-    this.dataSource$ = this.studentService
-      .getStudents()
-      .pipe(
-        map((students) => 
-        students.map( s => ({
-          ...s,
-          name: s.name.toUpperCase(),
-          surname: s.surname.toUpperCase()
-        }))));
+    private store: Store,
+    private notifier: CustomNotifierService
+  ){
+    this.dataSource$ = this.store.select(selectStudents);
   }
 
   ngOnInit(): void {
-    this.studentService.loadStudents();
+    this.store.dispatch(StudentActions.loadStudents());
   }
 
   edit(student: Student): void{
@@ -42,13 +38,17 @@ export class StudentComponent {
       )
       .subscribe( (edited: Student) => {
         if(edited){
-          this.studentService.updateStudent(student.id, edited);
+          this.store.dispatch(StudentActions.updateStudent( {studentId: student.id, payload: edited} ));
         }
       });
   }
 
   delete(student: Student): void{
-    this.studentService.deleteStudentById(student.id);
+    this.notifier
+      .warnPopup('Eliminar', '¿Desea continuar con la eliminación del estudiante?')
+      .then( res => {
+        if(res.isConfirmed) this.store.dispatch(StudentActions.deleteStudentById( {studentId: student.id} ));
+      });
   }
 
   createUserDialog(): void{
@@ -60,13 +60,9 @@ export class StudentComponent {
       )
       .subscribe( (newStudent: Student) => {
         if(newStudent){
-          this.studentService.createStudent(newStudent);    
+          this.store.dispatch(StudentActions.createStudent( {payload: newStudent} ))    
         }
       });
-  }
-
-  loadStudent(): void{
-    this.studentService.loadStudents();
   }
 
   ngOnDestroy(): void {

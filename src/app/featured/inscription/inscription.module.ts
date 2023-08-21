@@ -5,6 +5,10 @@ import { MaterialModule } from 'src/app/shared/modules/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InscriptionTableComponent } from './pages/inscription-table/inscription-table.component';
 import { RouterModule } from '@angular/router';
+import { EffectsModule } from '@ngrx/effects';
+import { InscriptionEffects } from './store/inscription.effects';
+import { StoreModule } from '@ngrx/store';
+import { inscriptionFeature } from './store/inscription.reducer';
 
 
 
@@ -17,7 +21,9 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     MaterialModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    StoreModule.forFeature(inscriptionFeature),
+    EffectsModule.forFeature([InscriptionEffects])
   ],
   exports: [
     InscriptionDialogFormComponent,

@@ -24,16 +24,16 @@ export class InscriptionService {
     return this.apiService.getById('inscriptions', inscriptionId).pipe(take(1));
   }
 
-  getAll(param?: any): void {
+  getAll(param?: any): Observable<Inscription[]> {
 
-    this.apiService
-      .getAll('inscriptions', {type: 'parent', name:'course'}, param)
-      .subscribe({
-        next: (inscriptions) => {
-          this._inscriptions$.next(inscriptions);
-        },
-        error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
-      })
+    return this.apiService
+      .getAll('inscriptions', [{type: 'parent', name:'course'},{type: 'parent', name:'student'}], param);
+      // .subscribe({
+      //   next: (inscriptions) => {
+      //     this._inscriptions$.next(inscriptions);
+      //   },
+      //   error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
+      // })
   }
 
   create(payload: Inscription): void {

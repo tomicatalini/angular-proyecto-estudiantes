@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-import Swal, { SweetAlertOptions } from 'sweetalert2';
+import { Observable, Subject } from 'rxjs';
+import Swal, { SweetAlertOptions, SweetAlertResult } from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -44,5 +44,29 @@ export class CustomNotifierService {
       timer: 2500,
       timerProgressBar: true
     });
+  }
+
+  errorPopup(title: string, text?: string): Promise<SweetAlertResult<any>> {
+    return Swal.fire({
+      icon: 'error',
+      title: title,
+      text,
+      showCloseButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
+    })
+  }
+
+  warnPopup(title: string, text?: string): Promise<SweetAlertResult<any>> {
+    return Swal.fire({
+      icon: 'warning',
+      title: title,
+      text,
+      showCloseButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
+    })
   }
 }

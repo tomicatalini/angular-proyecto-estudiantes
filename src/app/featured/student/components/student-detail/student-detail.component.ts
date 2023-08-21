@@ -10,6 +10,11 @@ import { Course } from 'src/app/featured/course/model/model';
 import { Inscription } from 'src/app/featured/inscription/models/models';
 import { Observable, finalize, pipe, take, tap } from 'rxjs';
 import Swal from 'sweetalert2';
+import { Store } from '@ngrx/store';
+import { InscriptionActions } from 'src/app/featured/inscription/store/inscription.actions';
+import { selectInscriptionLoading, selectInscriptions } from 'src/app/featured/inscription/store/inscription.selectors';
+import { StudentActions } from '../../store/student.actions';
+import { selectStudent, selectStudentCourses } from '../../store/student.selectors';
 
 @Component({
   selector: 'app-student-detail',
@@ -32,20 +37,34 @@ export class StudentDetailComponent implements OnInit{
     email: this.emailControl
   }); 
 
-  student: Student | undefined = undefined;
+  student: Student | null = null;
   studenInscription$ = new Observable<Inscription[]>;
   courses: (number | string)[] = [];
+  courses$: Observable<Course[]>
 
   updateMode: boolean = false;
+  loading$: Observable<boolean>;
 
   constructor(
     private studentService: StudentService,
     private inscriptionService: InscriptionService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
+    private store: Store,
     public dialog: MatDialog,    
   ){
-    this.studenInscription$ =this.inscriptionService.getSubscription().pipe(tap(inscriptions => this.courses = inscriptions.map(insc => insc.courseId)));
+    this.loading$ = this.store.select(selectInscriptionLoading);
+    this.studenInscription$ = this.store.select(selectInscriptions);
+    
+    this.store.select(selectStudent)
+      .subscribe(student => {
+        this.student = student;
+        if(student){
+          this.studentForm.patchValue(student);
+        }
+      });
+
+    this.courses$ = this.store.select(selectStudentCourses);
   }
 
   ngOnInit(): void {
@@ -55,21 +74,10 @@ export class StudentDetailComponent implements OnInit{
       alert(`El id ${this.activatedRoute.snapshot.params['id']} es invalido!`);
       this.router.navigate(['dashboard','student']);
     }
-     
-    this.studentService
-      .getStudentById(studentId)
-      .pipe(
-        take(1),
-        finalize(() => {
-          this.inscriptionService.getAll();         
-        })
-      )
-      .subscribe(studentPersisted => {
-        if(studentPersisted){
-          this.student = studentPersisted;
-          this.studentForm.patchValue(studentPersisted);
-        }
-      });
+
+    this.store.dispatch(StudentActions.loadStudentById({payload: studentId}));
+    this.store.dispatch(InscriptionActions.loadInscriptionsByStudentId({payload: studentId}));
+    this.store.dispatch(StudentActions.loadStudentCourses({payload: studentId}));
   }
 
   assignCourse(){
