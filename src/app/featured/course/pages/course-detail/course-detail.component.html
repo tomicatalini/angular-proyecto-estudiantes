@@ -1,2 +1,77 @@
-<h1>Detalle del Curso</h1>
-<pre>{{course$ | async | json}}</pre>
+<section>
+    <header class="m-1 flex flex-row align-items-center justify-content-between">
+        <h2>Detalle del Curso</h2>
+        <div class="flex flex-grow justify-content-end gap-2">
+            <!-- <button mat-raised-button *ngIf="!updateMode" color="accent" (click)="enableUpdate()">Habilitar edición</button>
+            <button mat-raised-button *ngIf="updateMode" color="primary" (click)="update()">Aceptar</button> -->
+            <!-- <button mat-raised-button color="warn" (click)="delete()">Eliminar</button> -->
+        </div>
+    </header>
+    <form [formGroup]="courseForm" class="grid grid-nogutters">
+        <mat-form-field appearance="outline" class="col-1">
+            <mat-label>#</mat-label>
+            <input matInput formControlName="id" type="text">
+            <mat-error *ngFor="let error of nameControl.errors | keyvalue">{{ error | formControlError: 'Id' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-5">
+            <mat-label>Nombre del Curso</mat-label>
+            <input matInput formControlName="name" type="text">
+            <mat-error *ngFor="let error of nameControl.errors | keyvalue">{{ error | formControlError: 'Nombre' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Fecha de Inicio</mat-label>
+            <input matInput formControlName="startDate" [matDatepicker]="picker">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngFor="let error of startDateControl.errors | keyvalue">{{ error | formControlError: 'Fecha de Inicio' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Fecha de Finalización</mat-label>
+            <input matInput formControlName="endDate" [matDatepicker]="pickerEndDate">
+            <mat-datepicker-toggle matIconSuffix [for]="pickerEndDate"></mat-datepicker-toggle>
+            <mat-datepicker #pickerEndDate></mat-datepicker>
+            <mat-error *ngFor="let error of endDateControl.errors | keyvalue">{{ error | formControlError: 'Fecha de Finalización' }}</mat-error>
+        </mat-form-field>
+    </form>
+</section>
+<section>
+    <header class="m-1 flex flex-row align-items-center justify-content-between">
+        <h2>Gestion de Cursos</h2>
+        <!-- <button mat-raised-button color="primary" (click)="assignCourse()">Asignar Curso</button>     -->
+    </header>
+    <mat-accordion>
+        <mat-expansion-panel hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Estudiantes inscriptos en el curso
+            </mat-panel-title>
+            <mat-panel-description>
+              cantindad: 20
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <p>Aca va la tabla de estudiantes con sus operaciones para poder agregar alguno.</p>
+          <app-student-list class="col-12 my-3" 
+            [dataSource]="(enrolledStudents$ | async) || []" 
+            (studentEdit)="editStudent($event)" 
+            (studentDelete)="deleteStudent($event)"></app-student-list>
+        </mat-expansion-panel>
+        <mat-expansion-panel (opened)="panelOpenState = true"
+                             (closed)="panelOpenState = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Clases
+            </mat-panel-title>
+            <mat-panel-description>
+              cantidad de clases del curso: 12
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <p>Aca va la tabla de clases consus operaciones CRUD</p>
+        </mat-expansion-panel>
+      </mat-accordion>
+    <!-- <app-inscription-table [dataSource]="(studenInscription$ | async) || []" 
+        [canView]="false" 
+        [canEdit]="false"
+        class="grid grid-nogutters mx-1" 
+        (inscriptionDelete)="inscriptionTableDelete($event)">
+    </app-inscription-table> -->
+</section>

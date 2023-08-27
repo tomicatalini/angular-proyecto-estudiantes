@@ -7,7 +7,6 @@ import { CompleteNamePipe } from './pipes/complete-name.pipe';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/shared/modules/material.module';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { StudentMockService } from './mock/student-mock.service';
 import { StudentDetailComponent } from './components/student-detail/student-detail.component';
 import { RouterModule } from '@angular/router';
 import { StudentRoutingModule } from './student-routing.module';
@@ -36,7 +35,7 @@ import { studentFeature } from './store/student.reducer';
     SharedModule,
     RouterModule,
     InscriptionModule,
-    CourseModule,
+    // CourseModule,
     StoreModule.forFeature(studentFeature),
     EffectsModule.forFeature([StudentEffects]),
   ],
@@ -44,7 +43,6 @@ import { studentFeature } from './store/student.reducer';
     StudentComponent,
     StudentListComponent,
     StudentDetailComponent,
-  ],
-  providers: [StudentMockService]
+  ]
 })
 export class StudentModule { }

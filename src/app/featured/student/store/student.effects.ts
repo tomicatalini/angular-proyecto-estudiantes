@@ -1,14 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, concatMap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { StudentActions } from './student.actions';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
-import { Student } from '../model/student';
-import { Course } from '../../course/model/model';
-import { Inscription } from '../../inscription/models/models';
 import { Store } from '@ngrx/store';
+import { StudentService } from '../student.service';
 
 
 @Injectable()
@@ -19,7 +16,7 @@ export class StudentEffects {
 
       ofType(StudentActions.loadStudents),
       concatMap(() =>
-        this.getAll().pipe(
+        this.studentService.getAll('students').pipe(
           map(data => StudentActions.loadStudentsSuccess({ data })),
           catchError(error => of(StudentActions.loadStudentsFailure({ error }))))
       )
@@ -31,7 +28,7 @@ export class StudentEffects {
 
       ofType(StudentActions.loadStudentById),
       concatMap((action) =>
-        this.getStudentById(action.payload).pipe(
+        this.studentService.getById('students',action.payload).pipe(
           map(data => StudentActions.loadStudentByIdSuccess({ data })),
           catchError(error => of(StudentActions.loadStudentByIdFailure({ error }))))
       )
@@ -42,7 +39,7 @@ export class StudentEffects {
     return this.actions$.pipe(
       ofType(StudentActions.loadStudentCourses),
       concatMap((action) => 
-        this.getAllStudentCourses(action.payload).pipe(
+        this.studentService.getAllStudentCourses(action.payload).pipe(
           map(data => StudentActions.loadStudentCoursesSuccess( {data})),
           catchError(error => of(StudentActions.loadStudentCoursesFailure({error})))
         )
@@ -54,7 +51,7 @@ export class StudentEffects {
     return this.actions$.pipe(
       ofType(StudentActions.createStudent),
       concatMap((action) => 
-        this.createStudent(action.payload).pipe(
+        this.studentService.create('students',action.payload).pipe(
           map(data => StudentActions.createStudentSuccess( {data} )),
           catchError(error => of(StudentActions.createStudentFailure( {error} )))
         )
@@ -66,7 +63,7 @@ export class StudentEffects {
     return this.actions$.pipe(
       ofType(StudentActions.updateStudent),
       concatMap((action) => 
-        this.updateStudent(action.studentId, action.payload).pipe(
+        this.studentService.updateById('students',action.studentId, action.payload).pipe(
           map(data => StudentActions.updateStudentSuccess( {data} )),
           catchError(error => of(StudentActions.updateStudentFailure( {error} )))
         )
@@ -78,7 +75,7 @@ export class StudentEffects {
     return this.actions$.pipe(
       ofType(StudentActions.deleteStudentById),
       concatMap((action) => 
-        this.deleteStudentById(action.studentId).pipe(
+        this.studentService.deleteById('students', action.studentId).pipe(
           map(data => StudentActions.deleteStudentByIdSuccess( {data} )),
           catchError(error => of(StudentActions.deleteStudentByIdFailure( {error} )))
         )
@@ -96,33 +93,37 @@ export class StudentEffects {
     )
   }, {dispatch: false})
 
-  constructor(private actions$: Actions, private httpClient: HttpClient, private store: Store) {}
+  constructor(
+    private actions$: Actions, 
+    private httpClient: HttpClient,
+    private studentService: StudentService, 
+    private store: Store) {}
   
-  private getStudentById(studentId: number): Observable<Student> {
-    return this.httpClient.get<Student>(environment.baseApiUrl + `/students/${studentId}`);
-  }
+  // private getStudentById(studentId: number): Observable<Student> {
+  //   return this.httpClient.get<Student>(environment.baseApiUrl + `/students/${studentId}`);
+  // }
 
-  private getAll(): Observable<Student[]> {
-    return this.httpClient.get<Student[]>(environment.baseApiUrl + `/students`);
-  }
+  // private getAll(): Observable<Student[]> {
+  //   return this.httpClient.get<Student[]>(environment.baseApiUrl + `/students`);
+  // }
 
-  private getAllStudentCourses(studentId: number):  Observable<Course[]>{
-    return this.httpClient
-      .get<Inscription[]>(environment.baseApiUrl + `/inscriptions?_expand=student&_expand=course&studentId=${studentId}`)
-      .pipe(
-        map((inscriptions) => inscriptions.map(inscription => inscription.course!))
-      )
-  }
+  // private getAllStudentCourses(studentId: number):  Observable<Course[]>{
+  //   return this.httpClient
+  //     .get<Inscription[]>(environment.baseApiUrl + `/inscriptions?_expand=student&_expand=course&studentId=${studentId}`)
+  //     .pipe(
+  //       map((inscriptions) => inscriptions.map(inscription => inscription.course!))
+  //     )
+  // }
 
-  private createStudent(payload: Student): Observable<Student> {
-    return this.httpClient.post<Student>(environment.baseApiUrl + `/students`, payload);
-  }
+  // private createStudent(payload: Student): Observable<Student> {
+  //   return this.httpClient.post<Student>(environment.baseApiUrl + `/students`, payload);
+  // }
 
-  private updateStudent(studentId: number, payload: Student): Observable<Student> {
-    return this.httpClient.put<Student>(environment.baseApiUrl + `/students/${studentId}`, payload);
-  }
+  // private updateStudent(studentId: number, payload: Student): Observable<Student> {
+  //   return this.httpClient.put<Student>(environment.baseApiUrl + `/students/${studentId}`, payload);
+  // }
 
-  private deleteStudentById(studentId: number): Observable<Student>{
-    return this.httpClient.delete<Student>(environment.baseApiUrl + `/students/${studentId}`);
-  }
+  // private deleteStudentById(studentId: number): Observable<Student>{
+  //   return this.httpClient.delete<Student>(environment.baseApiUrl + `/students/${studentId}`);
+  // }
 }

@@ -3,79 +3,34 @@ import { Student } from './model/student';
 import { BehaviorSubject, Observable, take, map, mergeMap, of, finalize, catchError } from 'rxjs';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CustomNotifierService } from '../../core/services/custom-notifier.service';
+import { HttpClient } from '@angular/common/http';
+import { Inscription } from '../inscription/models/models';
+import { environment } from 'src/environments/environment';
+import { Course } from '../course/model/model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class StudentService {
-  private students$ = new BehaviorSubject<Student []>([]); 
+export class StudentService extends ApiService<Student> {
 
   constructor(
-    private apiService: ApiService<Student>,
+    private _httpClient: HttpClient,
     private notifierService: CustomNotifierService
-  ) {}
-
-  getStudents(): Observable<Student[]>{
-    return this.students$.asObservable();
-  }
-
-  loadStudents(): void {
-    this.apiService
-      .getAll('students')
-      .subscribe(students => this.students$.next(students));
-  }
-
-  getStudentById(id: number | string): Observable<Student | undefined> {
-    return this.apiService.getById('students', id).pipe(take(1));
-  }
-
-  createStudent(payload: Student): void {
-    this.apiService
-      .create('students', payload)
-      .pipe(        
-        mergeMap((newStudent) => this.students$.pipe(
-          take(1),
-          map((students) => [...students, newStudent])
-        ))
-      )
-      .subscribe( {
-        next: students => {
-          this.students$.next(students);
-          this.notifierService.toastSuccessNotification('Tenemos un nuevo estudiante!');
-        },
-        error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación..')
-      });
-  }  
-
-  updateStudent(id: string | number, payload: Student): Observable<boolean> {
-
-    return this.apiService
-      .updateById('students', id, payload)
-      .pipe(
-        map(() => true),
-        finalize(() => {
-          this.loadStudents();
-          this.notifierService.toastSuccessNotification('La actualización se realizó correctamente', 1000)
-        }),
-        catchError(() => of(false))
-      );
-      // .subscribe({
-      //   next: () => this.loadStudents(),
-      //   error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación..')
-      // });    
-  }
-
-  deleteStudentById(id: number): void {
-    this.apiService
-      .deleteById('students', id)
-      .subscribe(() => this.loadStudents());
+  ) {
+    super(_httpClient);
   }
 
   getTotal(): Observable<number> {
-    return this.students$
+    return this.getAll('students').pipe(
+      take(1),
+      map((students) => students.length));
+  }
+
+  getAllStudentCourses(studentId: number):  Observable<Course[]>{
+    return this._httpClient
+      .get<Inscription[]>(environment.baseApiUrl + `/inscriptions?_expand=student&_expand=course&studentId=${studentId}`)
       .pipe(
-        take(1),
-        map((students) => students.length)
-      );
+        map((inscriptions) => inscriptions.map(inscription => inscription.course!))
+      )
   }
 }

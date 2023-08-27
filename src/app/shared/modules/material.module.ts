@@ -19,6 +19,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatCardModule} from '@angular/material/card';
 import {MatSelectModule} from '@angular/material/select';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @NgModule({
   declarations: [],
@@ -42,7 +43,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     MatRadioModule,
     MatCardModule,
     MatSelectModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatExpansionModule
   ]
 })
 export class MaterialModule { }

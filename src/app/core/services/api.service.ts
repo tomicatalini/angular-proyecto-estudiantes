@@ -12,34 +12,29 @@ export interface Relationship {
   providedIn: 'root'
 })
 export class ApiService<T> {
-
+  
   constructor(
-    private httpClient: HttpClient
+    public httpClient: HttpClient
   ) {}
   
-  getById(entity: string, id: string | number) {
+  getById(entity: string, id: number) {
     return this.httpClient.get<T>(`${environment.baseApiUrl}/${entity}/${id}`).pipe(catchError(this.handlerError));
   }
 
-  getAll(entity: string, relationships?: Relationship[], params?: any): Observable<T[]> {
+  getAll(entity: string): Observable<T[]> {
 
-    if(relationships && relationships.length){
-      let relationshipUrl = this.createRelationshipQueryParams(relationships);
-      return this.httpClient.get<T[]>(`${environment.baseApiUrl}/${entity}${relationshipUrl}`, {params}).pipe(catchError(this.handlerError));
-    }
-
-    return this.httpClient.get<T[]>(`${environment.baseApiUrl}/${entity}`, {params}).pipe(catchError(this.handlerError));
+    return this.httpClient.get<T[]>(`${environment.baseApiUrl}/${entity}`).pipe(catchError(this.handlerError));
   }
 
-  create(entity: string, body: T): Observable<T> {
-    return this.httpClient.post<T>(`${environment.baseApiUrl}/${entity}`, body).pipe(catchError(this.handlerError));
+  create(entity: string, payload: T): Observable<T> {
+    return this.httpClient.post<T>(`${environment.baseApiUrl}/${entity}`, payload).pipe(catchError(this.handlerError));
   }
 
-  updateById(entity: string, id: string | number, body: T): Observable<T> {
-    return this.httpClient.put<T>(`${environment.baseApiUrl}/${entity}/${id}`, body).pipe(catchError(this.handlerError));
+  updateById(entity: string, id: number, payload: T): Observable<T> {
+    return this.httpClient.put<T>(`${environment.baseApiUrl}/${entity}/${id}`, payload).pipe(catchError(this.handlerError));
   }
 
-  deleteById(entity: string, id: string | number): Observable<T> {
+  deleteById(entity: string, id: number): Observable<T> {
     return this.httpClient.delete<T>(`${environment.baseApiUrl}/${entity}/${id}`).pipe(catchError(this.handlerError));
   }
 
@@ -51,16 +46,5 @@ export class ApiService<T> {
     }
 
     return throwError('Error en la comunicación http de la API-JsonServer');
-  }
-  
-  private createRelationshipQueryParams(relationships: Relationship[]): string{
-    let result = '?';
-
-    relationships.forEach( (rel) => {
-      result += rel.type === 'child' ? '_embed' : '_expand';
-      result += `=${rel.name}&`;
-    });
-
-    return result.substring(0, result.length-1);
   }
 }

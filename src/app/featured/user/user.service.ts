@@ -49,7 +49,7 @@ export class UserService {
       });
   }
 
-  update(id: number | string, payload: User): void {
+  update(id: number, payload: User): void {
     this.apiService
     .updateById('users', id, payload)
     .subscribe({

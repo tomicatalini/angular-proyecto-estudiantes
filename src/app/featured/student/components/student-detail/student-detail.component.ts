@@ -95,7 +95,7 @@ export class StudentDetailComponent implements OnInit{
             courseId: course.id
           }
 
-          this.inscriptionService.create(inscription);
+          this.inscriptionService.create('inscriptions', inscription);
         }
       });
   }
@@ -108,7 +108,7 @@ export class StudentDetailComponent implements OnInit{
   update(){
     this.updateMode = false;
     this.studentService
-      .updateStudent(Number(this.student?.id), this.studentForm.getRawValue())
+      .updateById('students',Number(this.student?.id), this.studentForm.getRawValue())
       .subscribe({
         next: (isUpdated) => {
           if(isUpdated){
@@ -131,7 +131,7 @@ export class StudentDetailComponent implements OnInit{
       cancelButtonText: 'Cancelar'
     }).then(res => {
       if(res.isConfirmed){
-        this.studentService.deleteStudentById(Number(this.student?.id));
+        this.studentService.deleteById('students', Number(this.student?.id));
         this.router.navigate(['dashboard', 'student']);
       }
     });
@@ -139,7 +139,7 @@ export class StudentDetailComponent implements OnInit{
   
   inscriptionTableDelete(inscription: Inscription): void{    
     if(inscription){
-      this.inscriptionService.delete(inscription);
+      this.inscriptionService.deleteById('inscriptions', inscription.id!);
     }
   }
 }

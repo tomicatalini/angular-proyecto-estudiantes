@@ -6,7 +6,7 @@ import { Course } from '../../model/model';
 @Component({
   selector: 'app-course-dialog-form',
   templateUrl: './course-dialog-form.component.html',
-  styleUrls: ['./course-dialog-form.component.scss']
+  styleUrls: []
 })
 export class CourseDialogFormComponent implements OnInit {
 

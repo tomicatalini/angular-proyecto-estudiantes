@@ -1,73 +1,30 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, take } from 'rxjs';
+import { BehaviorSubject, Observable, map, take } from 'rxjs';
 import { Course } from './model/model';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CustomNotifierService } from 'src/app/core/services/custom-notifier.service';
+import { HttpClient } from '@angular/common/http';
+import { Student } from '../student/model/student';
+import { environment } from 'src/environments/environment';
+import { Inscription } from '../inscription/models/models';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CourseService {
-
-  private _courses$ = new BehaviorSubject<Course[]>([]);
+export class CourseService extends ApiService<Course> {
 
   constructor(
-    private apiService: ApiService<Course>,
+    private _httpClient: HttpClient,
     private notifierService: CustomNotifierService
-  ) {}
-
-  getSubscription(): Observable<Course[]> {
-    return this._courses$.asObservable();
+  ) {
+    super(_httpClient);
   }
 
-  getById(courseId: number): Observable<Course | undefined> {
-    return this.apiService.getById('courses', courseId).pipe(take(1));
-  }
-
-  getAll(): void {
-    this.apiService
-      .getAll('courses')
-      .subscribe({
-        next: (courses) => {
-          this._courses$.next(courses)
-        },
-        error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
-      })
-  }
-
-  create(payload: Course): void {
-    this.apiService
-      .create('courses', payload)
-      .subscribe({
-        next: () => {
-          this.getAll();
-          this.notifierService.toastSuccessNotification('Operación exitosa!');
-        },
-        error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
-      });
-  }
-
-  update(id: number | string, payload: Course): void {
-    this.apiService
-    .updateById('courses', id, payload)
-    .subscribe({
-      next: () => {
-        this.getAll();
-        this.notifierService.toastSuccessNotification('Operación exitosa!');
-      },
-      error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
-    });
-  }
-
-  deleteById(courseId: number): void {
-    this.apiService
-      .deleteById('courses', courseId)
-      .subscribe({
-        next: () => {
-          this.getAll();
-          this.notifierService.toastSuccessNotification('Operación exitosa!');
-        },
-        error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
-      });
+  getEnrolledStudents(courseId: number): Observable<Student[]> {
+    return this._httpClient
+      .get<Inscription[]>(environment.baseApiUrl + `/inscriptions?_expand=student&courseId=${courseId}`)
+      .pipe(
+        map((inscriptions) => inscriptions.map(inscription => inscription.student!))
+      );
   }
 }

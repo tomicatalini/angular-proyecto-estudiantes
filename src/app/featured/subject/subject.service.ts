@@ -47,7 +47,7 @@ export class SubjectService {
       });
   }
 
-  update(id: number | string, payload: Subject): void {
+  update(id: number, payload: Subject): void {
     this.apiService
     .updateById('subjects', id, payload)
     .subscribe({

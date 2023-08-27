@@ -38,14 +38,14 @@ export class InscriptionDialogFormComponent implements OnDestroy {
       this.form.patchValue(data.inscription);
     }
 
-    this.courses$ = this.courseService
-      .getSubscription()
-      .pipe(
-        takeUntil(this.isDetroyed),
-        map( courses => courses.filter(course => !data.courses.includes(course.id)))
-      );
+    // this.courses$ = this.courseService
+    //   .getSubscription()
+    //   .pipe(
+    //     takeUntil(this.isDetroyed),
+    //     map( courses => courses.filter(course => !data.courses.includes(course.id)))
+    //   );
 
-    this.courseService.getAll();
+    // this.courseService.getAll();
   }
 
   displayFn(seleccionado: Course): string {

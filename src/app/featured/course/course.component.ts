@@ -1,28 +1,30 @@
 import { Component } from '@angular/core';
-import { Observable, Subject, map, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { Course } from './model/model';
 import { MatDialog } from '@angular/material/dialog';
-import { CourseService } from './course.service';
 import { CourseDialogFormComponent } from './pages/course-dialog-form/course-dialog-form.component';
+import { Store } from '@ngrx/store';
+import { selectCourses } from './store/course.selectors';
+import { CourseActions } from './store/course.actions';
 
 @Component({
   selector: 'app-course',
   templateUrl: './course.component.html',
-  styleUrls: ['./course.component.scss']
+  styleUrls: []
 })
 export class CourseComponent {
-  dataSource$: Observable<Course[]>;
   public destroyed = new Subject<boolean>();
-  
+  dataSource$: Observable<Course[]>;
+
   constructor(
     public dialog: MatDialog,
-    private courseService: CourseService
-  ){    
-    this.dataSource$ = this.courseService.getSubscription();
+    private store: Store
+  ){
+    this.dataSource$ = this.store.select(selectCourses);
   }
 
   ngOnInit(): void {
-    this.courseService.getAll();
+    this.store.dispatch(CourseActions.loadCourses());
   }
 
   edit(course: Course): void{
@@ -34,13 +36,13 @@ export class CourseComponent {
       )
       .subscribe( (edited: Course) => {
         if(edited){
-          this.courseService.update(course.id, edited);
+          this.store.dispatch(CourseActions.updateCourse({ courseId:course.id, payload: edited}));
         }
       });
   }
 
   delete(course: Course): void{
-    this.courseService.deleteById(course.id);
+    this.store.dispatch(CourseActions.deleteCourseById({ courseId:course.id}));
   }
 
   createCourseDialog(): void{
@@ -52,7 +54,7 @@ export class CourseComponent {
       )
       .subscribe( (newCourse: Course) => {
         if(newCourse){
-          this.courseService.create(newCourse);    
+          this.store.dispatch(CourseActions.createCourse({ payload: newCourse}));   
         }
       });
   }

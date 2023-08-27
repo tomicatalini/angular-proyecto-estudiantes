@@ -10,6 +10,11 @@ import { RouterModule } from '@angular/router';
 import { CourseComponent } from './course.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { EffectsModule } from '@ngrx/effects';
+import { CourseEffects } from './store/course.effects';
+import { StoreModule } from '@ngrx/store';
+import { courseFeature } from './store/course.reducer';
+import { StudentModule } from '../student/student.module';
 
 
 @NgModule({
@@ -25,7 +30,10 @@ import { SharedModule } from 'src/app/shared/shared.module';
     RouterModule,
     MaterialModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    StudentModule,
+    StoreModule.forFeature(courseFeature),
+    EffectsModule.forFeature([CourseEffects]),    
   ],
   exports:[
     CourseTableComponent,
