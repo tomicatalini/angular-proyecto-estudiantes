@@ -8,3 +8,4 @@ export const selectInscriptionState = createFeatureSelector<fromInscription.Stat
 export const selectInscriptionLoading = createSelector(selectInscriptionState, (state) => state.loading);
 
 export const selectInscriptions = createSelector(selectInscriptionState, (state) => state.data);
+export const selectEnrolledStudents = createSelector(selectInscriptionState, (state) => state.enrolledStudents);

@@ -1,34 +1,8 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Menu } from 'src/app/core/models/menu';
-
-const menues: Menu[] = [{
-    icon: 'home',
-    title: 'Inicio',
-    route: 'home',
-    disabled: false
-  },{
-  icon: 'people',
-  title: 'Estudiantes',
-  route: 'student',
-  disabled: false
-  },{
-    icon: 'collections_bookmark',
-    title: 'Cursos',
-    route: 'course',
-    disabled: false
-  },{
-    icon: 'class',
-    title: 'Materias',
-    route: 'subject',
-    disabled: false
-  },{
-    icon: 'manage_accounts',
-    title: 'Usuarios',
-    route: 'user',
-    disabled: false
-  }
-]; 
+import { Store } from '@ngrx/store';
+import { Observable, tap } from 'rxjs';
+import { selectIsAdmin } from 'src/app/store/auth/auth.selectors';
 
 @Component({
   selector: 'app-sidenav',
@@ -40,10 +14,14 @@ export class SidenavComponent {
   @Output() sidenavChange = new EventEmitter();
 
   small: boolean = false;
+  menuSelected: string = 'home';
 
-  menuSelected: Menu = menues[0];
+  isAdmin$: Observable<boolean>;
 
-  constructor( private breakpoints: BreakpointObserver){
+  constructor( 
+    private breakpoints: BreakpointObserver,
+    private store: Store
+  ){
     this.breakpoints
     .observe('(max-width: 750px)')
     .subscribe( data => {
@@ -51,15 +29,7 @@ export class SidenavComponent {
       this.sidenav = !this.sidenav;
       this.sidenavChange.emit(this.sidenav);
     });
-  }
 
-  changeMenu(menu: Menu): void{
-    if(!menu.disabled){
-      this.menuSelected = menu;
-    }
-  }
-  
-  getMenues(): Menu[] {
-    return menues;
+    this.isAdmin$ = this.store.select(selectIsAdmin);
   }
 }

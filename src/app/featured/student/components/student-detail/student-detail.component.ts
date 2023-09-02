@@ -7,7 +7,7 @@ import { InscriptionDialogFormComponent } from 'src/app/featured/inscription/pag
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { InscriptionService } from '../../../inscription/inscription.service';
 import { Course } from 'src/app/featured/course/model/model';
-import { Inscription } from 'src/app/featured/inscription/models/models';
+import { Inscription, InscriptionModalData } from 'src/app/featured/inscription/models/models';
 import { Observable, finalize, pipe, take, tap } from 'rxjs';
 import Swal from 'sweetalert2';
 import { Store } from '@ngrx/store';
@@ -39,11 +39,10 @@ export class StudentDetailComponent implements OnInit{
 
   student: Student | null = null;
   studenInscription$ = new Observable<Inscription[]>;
-  courses: (number | string)[] = [];
-  courses$: Observable<Course[]>
+  
+  courses: Course[] = [];
 
   updateMode: boolean = false;
-  loading$: Observable<boolean>;
 
   constructor(
     private studentService: StudentService,
@@ -53,8 +52,13 @@ export class StudentDetailComponent implements OnInit{
     private store: Store,
     public dialog: MatDialog,    
   ){
-    this.loading$ = this.store.select(selectInscriptionLoading);
-    this.studenInscription$ = this.store.select(selectInscriptions);
+    this.studenInscription$ = this.store.select(selectInscriptions).pipe(
+      tap(inscriptions => {
+        if(inscriptions){
+          this.courses = inscriptions.map(insc => insc.course!);
+        }
+      })
+    );
     
     this.store.select(selectStudent)
       .subscribe(student => {
@@ -63,8 +67,6 @@ export class StudentDetailComponent implements OnInit{
           this.studentForm.patchValue(student);
         }
       });
-
-    this.courses$ = this.store.select(selectStudentCourses);
   }
 
   ngOnInit(): void {
@@ -77,22 +79,26 @@ export class StudentDetailComponent implements OnInit{
 
     this.store.dispatch(StudentActions.loadStudentById({payload: studentId}));
     this.store.dispatch(InscriptionActions.loadInscriptionsByStudentId({payload: studentId}));
-    this.store.dispatch(StudentActions.loadStudentCourses({payload: studentId}));
   }
 
   assignCourse(){
-    let inscription = {id: null, studentId: this.student?.id, courseId: null};
+    const data: InscriptionModalData = {
+      id: this.student?.id!,
+      students: null,
+      courses: this.courses,
+      entity: 'student'
+    }
 
     this.dialog
-      .open(InscriptionDialogFormComponent, {data: {inscription, courses: this.courses}})
+      .open(InscriptionDialogFormComponent, {data})
       .afterClosed()
       .pipe(take(1))
-      .subscribe( (course: Course) => {
-        if(course){
+      .subscribe( (courseId: number) => {
+        if(courseId){
           let inscription: Inscription = {
             id: null,
             studentId: this.student?.id!,
-            courseId: course.id
+            courseId: courseId
           }
 
           this.inscriptionService.create('inscriptions', inscription);

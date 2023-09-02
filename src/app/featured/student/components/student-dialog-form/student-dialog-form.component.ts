@@ -6,7 +6,7 @@ import { Student } from '../../model/student';
 @Component({
   selector: 'app-student-dialog-form',
   templateUrl: './student-dialog-form.component.html',
-  styleUrls: ['./student-dialog-form.component.scss']
+  styleUrls: []
 })
 export class StudentDialogFormComponent {
   idControl = new FormControl<number | null>(null);

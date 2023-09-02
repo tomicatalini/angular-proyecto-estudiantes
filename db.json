@@ -7,7 +7,16 @@
       "email": "test@test.com",
       "password": "12345",
       "token": "P6YxOm0hX3B6mxgb0sHs",
-      "role": "administrador"
+      "role": "admin"
+    },
+    {
+      "id": 3,
+      "name": "No admin",
+      "surname": "No admin",
+      "email": "no@admin.com",
+      "password": "12345",
+      "token": "u1RHhZWqkEP4ntjgP8PP",
+      "role": "professor"
     }
   ],
   "students": [
@@ -34,12 +43,11 @@
       "endDate": "2023-09-21T03:00:00.000Z"
     }
   ],
-  "subjects": [],
   "inscriptions": [
     {
-      "id": 2,
-      "studentId": 3,
-      "courseId": 6
+      "id": 1,
+      "courseId": 6,
+      "studentId": 3
     }
   ]
 }

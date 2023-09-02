@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { Course } from '../model/model';
-import { Student } from '../../student/model/student';
+import { Inscription } from '../../inscription/models/models';
 
 export const CourseActions = createActionGroup({
   source: 'Course',
@@ -27,7 +27,7 @@ export const CourseActions = createActionGroup({
     'Delete Course By Id Failure': props<{ error: HttpErrorResponse }>(),
 
     'Load Enrolled Students': props<{ courseId: number }>(),
-    'Load Enrolled Students Success': props<{ data: Student[] }>(),
+    'Load Enrolled Students Success': props<{ data: Inscription[] }>(),
     'Load Enrolled Students Failure': props<{ error: HttpErrorResponse }>(),
   }
 });

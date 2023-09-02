@@ -14,6 +14,21 @@
       <td mat-cell *matCellDef="let inscription"> {{inscription['course'].name}} </td>
     </ng-container>
 
+    <ng-container matColumnDef="studentId">
+      <th mat-header-cell *matHeaderCellDef class="w-6rem"> ID Estudiante </th>
+      <td mat-cell *matCellDef="let inscription" class="text-center"> {{inscription['student'].id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="studentName">
+      <th mat-header-cell *matHeaderCellDef> Estudiante </th>
+      <td mat-cell *matCellDef="let inscription"> {{inscription['student'].name}} {{inscription['student'].surname}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="studentEmail">
+      <th mat-header-cell *matHeaderCellDef> Correo Electrónico </th>
+      <td mat-cell *matCellDef="let inscription"> {{inscription['student'].email}} </td>
+    </ng-container>
+
     <!-- Actions Column -->
     <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef class="w-2rem"> Acciones </th>

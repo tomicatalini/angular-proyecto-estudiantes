@@ -6,3 +6,5 @@ export const selectAuthState = createFeatureSelector<AuthState>(AuthFeatureKey);
 export const selectAuthUser = createSelector(selectAuthState, (state) => state.user);
 
 export const selectUserToken = createSelector(selectAuthUser, (user) => user?.token);
+
+export const selectIsAdmin = createSelector(selectAuthUser, (user) => user?.role.toLowerCase() === 'admin');

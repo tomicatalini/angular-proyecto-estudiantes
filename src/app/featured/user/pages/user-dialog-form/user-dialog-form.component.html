@@ -28,9 +28,9 @@
         <div class="col-12 flex flex-column">
             <mat-label>Rol</mat-label>
             <mat-radio-group formControlName="role">
-                <mat-radio-button value="administrador">Administrador</mat-radio-button>
-                <mat-radio-button value="profesor">Profesor</mat-radio-button>
+                <mat-radio-button value="professor" [checked]="true">Profesor</mat-radio-button>
                 <mat-radio-button value="tutor">Tutor</mat-radio-button>
+                <mat-radio-button value="admin">Administrador</mat-radio-button>
             </mat-radio-group>
         </div>
         <button mat-raised-button color="primary" class="col-12" (click)="close()">Guardar</button>

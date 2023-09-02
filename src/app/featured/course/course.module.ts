@@ -14,7 +14,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { CourseEffects } from './store/course.effects';
 import { StoreModule } from '@ngrx/store';
 import { courseFeature } from './store/course.reducer';
-import { StudentModule } from '../student/student.module';
+import { InscriptionModule } from '../inscription/inscription.module';
 
 
 @NgModule({
@@ -31,7 +31,7 @@ import { StudentModule } from '../student/student.module';
     MaterialModule,
     ReactiveFormsModule,
     SharedModule,
-    StudentModule,
+    InscriptionModule,
     StoreModule.forFeature(courseFeature),
     EffectsModule.forFeature([CourseEffects]),    
   ],

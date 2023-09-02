@@ -37,41 +37,14 @@
 <section>
     <header class="m-1 flex flex-row align-items-center justify-content-between">
         <h2>Gestion de Cursos</h2>
-        <!-- <button mat-raised-button color="primary" (click)="assignCourse()">Asignar Curso</button>     -->
+        <button mat-raised-button color="primary" (click)="enrollStudent()">Agregar Estudiante</button>    
     </header>
-    <mat-accordion>
-        <mat-expansion-panel hideToggle>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Estudiantes inscriptos en el curso
-            </mat-panel-title>
-            <mat-panel-description>
-              cantindad: 20
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-          <p>Aca va la tabla de estudiantes con sus operaciones para poder agregar alguno.</p>
-          <app-student-list class="col-12 my-3" 
-            [dataSource]="(enrolledStudents$ | async) || []" 
-            (studentEdit)="editStudent($event)" 
-            (studentDelete)="deleteStudent($event)"></app-student-list>
-        </mat-expansion-panel>
-        <mat-expansion-panel (opened)="panelOpenState = true"
-                             (closed)="panelOpenState = false">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Clases
-            </mat-panel-title>
-            <mat-panel-description>
-              cantidad de clases del curso: 12
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-          <p>Aca va la tabla de clases consus operaciones CRUD</p>
-        </mat-expansion-panel>
-      </mat-accordion>
-    <!-- <app-inscription-table [dataSource]="(studenInscription$ | async) || []" 
-        [canView]="false" 
+    <app-inscription-table
+        [dataSource]="(enrolledStudents$ | async) || []"
         [canEdit]="false"
+        [canView]="false"
+        [view]="'student'"
         class="grid grid-nogutters mx-1" 
-        (inscriptionDelete)="inscriptionTableDelete($event)">
-    </app-inscription-table> -->
+        (inscriptionDelete)="inscriptionTableDelete($event)"
+    ></app-inscription-table>
 </section>

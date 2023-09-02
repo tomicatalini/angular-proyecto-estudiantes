@@ -6,14 +6,41 @@
       class="w-15rem">
   
       <mat-nav-list role="list">
-        <mat-list-item *ngFor="let menu of getMenues()" 
-          class="select-none"
-          [routerLink]="menu.route"
-          [activated]="menuSelected === menu" 
-          [disabled]="menu.disabled"
-          (click)="changeMenu(menu)">
-          <mat-icon matListItemIcon>{{menu.icon}}</mat-icon>
-          <div matListItemTitle>{{menu.title}}</div>
+        <!-- HOME BUTTON -->
+        <mat-list-item class="select-none" 
+          routerLink="home" 
+          [activated]="menuSelected === 'home'" 
+          (click)="menuSelected = 'home'">
+            <mat-icon matListItemIcon>home</mat-icon>
+            <div matListItemTitle>Inicio</div>
+        </mat-list-item>
+        
+        <!-- STUDENT BUTTON -->
+        <mat-list-item class="select-none" 
+          routerLink="student" 
+          [activated]="menuSelected === 'student'" 
+          (click)="menuSelected = 'student'">
+            <mat-icon matListItemIcon>people</mat-icon>
+            <div matListItemTitle>Estudiantes</div>
+        </mat-list-item>
+
+        <!-- COURSE BUTTON -->
+        <mat-list-item class="select-none" 
+          routerLink="course" 
+          [activated]="menuSelected === 'course'" 
+          (click)="menuSelected = 'course'">
+            <mat-icon matListItemIcon>collections_bookmark</mat-icon>
+            <div matListItemTitle>Cursos</div>
+        </mat-list-item>
+        
+        <!-- USER BUTTON -->
+        <mat-list-item *ngIf="isAdmin$ | async" 
+          class="select-none" 
+          routerLink="user" 
+          [activated]="menuSelected === 'user'" 
+          (click)="menuSelected = 'user'">
+            <mat-icon matListItemIcon>manage_accounts</mat-icon>
+            <div matListItemTitle>Usuarios</div>
         </mat-list-item>
       </mat-nav-list>    
     </mat-sidenav>

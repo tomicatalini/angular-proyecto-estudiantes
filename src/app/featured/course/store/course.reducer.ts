@@ -1,14 +1,14 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { CourseActions } from './course.actions';
 import { Course } from '../model/model';
-import { Student } from '../../student/model/student';
+import { Inscription } from '../../inscription/models/models';
 
 export const courseFeatureKey = 'course';
 
 export interface State {
   course: Course | null,
   courses: Course[],
-  enrolledStudents: Student[],
+  enrolledStudents: Inscription[],
   error: unknown
 }
 

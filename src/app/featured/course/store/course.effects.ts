@@ -5,6 +5,7 @@ import { of } from 'rxjs';
 import { CourseActions } from './course.actions';
 import { CourseService } from '../course.service';
 import { Store } from '@ngrx/store';
+import { InscriptionActions } from '../../inscription/store/inscription.actions';
 
 
 @Injectable()
@@ -91,6 +92,18 @@ export class CourseEffects {
       )
     );
   });
+
+  deleteEnrolledStudent$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(
+        InscriptionActions.createInscriptionSuccess,
+        InscriptionActions.deleteInscriptionByIdSuccess
+      ),
+      map((action) => 
+        this.store.dispatch(CourseActions.loadEnrolledStudents({courseId: action.data.courseId}))
+      )
+    )
+  }, {dispatch: false});
 
   constructor(private actions$: Actions, private courseService: CourseService, private store: Store) {}
 }

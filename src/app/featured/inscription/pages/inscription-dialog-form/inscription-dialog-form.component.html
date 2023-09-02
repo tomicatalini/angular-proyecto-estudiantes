@@ -1,25 +1,24 @@
-<h2 mat-dialog-title title>Asignar Curso</h2>
+<h2 mat-dialog-title title class="text-center font-bold">{{data.entity === 'student' ?  'agregar curso' : 'agregar estudiante' | uppercase}}</h2>
 <mat-dialog-content>
-   <ng-container *ngIf="courses$ | async as courses; else cargando">
-        <form [formGroup]="form" class="grid grid-nogutters">
-            <input matInput formControlName="id" type="number" hidden>
-            <input matInput formControlName="studentId" type="number" hidden>
-            <mat-form-field appearance="outline" class="col-12">
-                <mat-label>Curso</mat-label>
-                <input matInput
-                    [matAutocomplete]="auto"
-                    [formControl]="courseControl">
-                <mat-autocomplete [displayWith]="displayFn" #auto="matAutocomplete">
-                  <mat-option *ngFor="let course of courses" [value]="course">
-                    <span>#{{course.id}} | {{course.name }}</span>
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
-            <button mat-raised-button color="primary" class="col-12" (click)="close()">Guardar</button>
-        </form>
+  <p>Seleccione un <strong>{{data.entity === 'student' ?  'curso' : 'estudiante'}}</strong></p>
+   <ng-container *ngIf="array$ | async as array; else cargando">
+      <mat-form-field appearance="outline" class="col-12">
+          <mat-label>{{data.entity === 'student' ?  'Cursos' : 'Estudiantes'}}</mat-label>
+          <input matInput
+              [matAutocomplete]="auto"
+              [formControl]="idControl"
+              tabindex="-1">
+              <mat-autocomplete [displayWith]="displayFn" #auto="matAutocomplete">
+                <mat-option *ngFor="let entity of array" [value]="entity.id">
+                  <span>#{{entity.id}} | {{entity.name }}</span>
+                </mat-option>
+              </mat-autocomplete>                
+        </mat-form-field>
+      <button mat-raised-button color="primary" class="col-12" (click)="close()">Guardar</button>
+
    </ng-container>
    <ng-template #cargando>
-        Buscando cursos...
+        Buscando {{data.entity === 'student' ?  'cursos' : 'estudiantes'}}...
    </ng-template>
    
 </mat-dialog-content>
