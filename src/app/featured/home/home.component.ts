@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { StudentService } from '../student/student.service';
-import { Observable, Subject, takeUntil } from 'rxjs';
-import { Student } from '../student/model/student';
+import { Observable, Subject } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectUserName, selectUserRole } from 'src/app/store/auth/auth.selectors';
 
 @Component({
   selector: 'app-home',
@@ -12,10 +12,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   private destoyed = new Subject<boolean>();
 
   numberStudents: number = 0;
+  userName$: Observable<string | null>;
+  userRole$: Observable<string | null>;
 
   constructor(
-    private studentService: StudentService
-  ){}
+    private store: Store
+  ){
+    this.userName$ = this.store.select(selectUserName);
+    this.userRole$ = this.store.select(selectUserRole);
+  }
 
   ngOnInit(): void {
   }

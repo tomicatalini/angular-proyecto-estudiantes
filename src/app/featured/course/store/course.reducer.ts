@@ -21,6 +21,7 @@ export const initialState: State = {
 
 export const reducer = createReducer(
   initialState,
+
   on(CourseActions.loadCourses, state => state),
   on(CourseActions.loadCoursesSuccess, (state, action) => {
     return {
@@ -35,11 +36,7 @@ export const reducer = createReducer(
     }
   }),
 
-  on(CourseActions.loadCourseById, state => {
-    return {
-      ...state,
-    }
-  }),
+  on(CourseActions.loadCourseById, state => state),
   on(CourseActions.loadCourseByIdSuccess, (state, action) => {
     return {
       ...state,

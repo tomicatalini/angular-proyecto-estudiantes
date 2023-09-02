@@ -2,8 +2,8 @@
   "users": [
     {
       "id": 2,
-      "name": "test",
-      "surname": "test",
+      "name": "Test",
+      "surname": "Test",
       "email": "test@test.com",
       "password": "12345",
       "token": "P6YxOm0hX3B6mxgb0sHs",
@@ -11,11 +11,20 @@
     },
     {
       "id": 3,
-      "name": "No admin",
-      "surname": "No admin",
-      "email": "no@admin.com",
+      "name": "Diego Armando",
+      "surname": "Maradona",
+      "email": "diego10@gmail.com",
       "password": "12345",
       "token": "u1RHhZWqkEP4ntjgP8PP",
+      "role": "tutor"
+    },
+    {
+      "id": 4,
+      "name": "Margarita",
+      "surname": "Perez",
+      "email": "MP@gmail.com",
+      "password": "12345",
+      "token": "H84d4lgo3qBNLRKdIUhD",
       "role": "professor"
     }
   ],
@@ -27,21 +36,107 @@
       "birthdate": "2023-08-11T03:00:00.000Z",
       "email": "tc@email.com",
       "registerDate": "2023-08-21T21:03:07.398Z"
+    },
+    {
+      "id": 4,
+      "name": "John",
+      "surname": "Doe",
+      "birthdate": null,
+      "email": "jd@gmail.com",
+      "registerDate": "2023-09-02T22:35:27.224Z"
+    },
+    {
+      "id": 5,
+      "name": "Juan Roman",
+      "surname": "Riquelme",
+      "birthdate": "2023-09-22T03:00:00.000Z",
+      "email": "jrq@gmail.com"
+    },
+    {
+      "id": 6,
+      "name": "Mila",
+      "surname": "Nesa",
+      "birthdate": "1997-07-13T03:00:00.000Z",
+      "email": "milanesanapo@gmail.com",
+      "registerDate": "2023-09-02T22:42:14.932Z"
     }
   ],
   "courses": [
     {
-      "id": 3,
-      "name": "View",
-      "startDate": "2023-08-01T03:00:00.000Z",
-      "endDate": "2023-08-31T03:00:00.000Z"
-    },
-    {
       "id": 6,
       "name": "Mongo DB",
       "startDate": "2023-07-04T03:00:00.000Z",
-      "endDate": "2023-09-21T03:00:00.000Z"
+      "endDate": "2023-09-21T03:00:00.000Z",
+      "professor": "Test"
+    },
+    {
+      "id": 7,
+      "name": "Angular",
+      "startDate": "2023-09-01T03:00:00.000Z",
+      "endDate": "2023-09-09T03:00:00.000Z",
+      "professor": "Diego Armando Maradona"
+    },
+    {
+      "id": 8,
+      "name": "React JS",
+      "startDate": "2023-09-01T03:00:00.000Z",
+      "endDate": "2023-09-30T03:00:00.000Z",
+      "professor": "Leonel Messi"
+    },
+    {
+      "id": 10,
+      "name": "Java desde Cero",
+      "startDate": "2023-09-01T03:00:00.000Z",
+      "endDate": "2023-09-02T03:00:00.000Z",
+      "professor": null
     }
   ],
-  "inscriptions": []
+  "inscriptions": [
+    {
+      "id": 3,
+      "courseId": 6,
+      "studentId": 4
+    },
+    {
+      "id": 4,
+      "courseId": 6,
+      "studentId": 3
+    },
+    {
+      "id": 5,
+      "studentId": 5,
+      "courseId": 6,
+      "date": "2023-09-02T22:28:57.618Z"
+    },
+    {
+      "id": 6,
+      "studentId": 5,
+      "courseId": 10,
+      "date": "2023-09-02T22:29:01.613Z"
+    },
+    {
+      "id": 7,
+      "studentId": 5,
+      "courseId": 8,
+      "date": "2023-09-02T22:29:07.534Z"
+    },
+    {
+      "id": 8,
+      "courseId": 7,
+      "studentId": 4,
+      "date": "2023-09-02T22:31:38.582Z"
+    },
+    {
+      "id": 11,
+      "courseId": 8,
+      "studentId": 4,
+      "date": "2023-09-02T22:35:57.531Z"
+    },
+    {
+      "id": 12,
+      "courseId": 7,
+      "studentId": 6,
+      "date": "2023-09-02T22:45:27.609Z"
+    }
+  ]
 }

@@ -12,6 +12,7 @@ import { Store } from '@ngrx/store';
 import { StudentActions } from '../../store/student.actions';
 import { selectStudent, selectStudentCoursesInscriptions } from '../../store/student.selectors';
 import { CourseInscriptionDialogFormComponent } from 'src/app/featured/inscription/pages/course-inscription-dialog-form/course-inscription-dialog-form.component';
+import { selectIsAdmin } from 'src/app/store/auth/auth.selectors';
 
 @Component({
   selector: 'app-student-detail',
@@ -40,6 +41,7 @@ export class StudentDetailComponent implements OnInit{
   courses: Course[] = [];
 
   updateMode: boolean = false;
+  isAdmin$: Observable<boolean>;
 
   constructor(
     private studentService: StudentService,
@@ -58,11 +60,13 @@ export class StudentDetailComponent implements OnInit{
     
     this.store.select(selectStudent)
       .subscribe(student => {
-        this.student = student;
-        if(student){
+        if(student !== null){
+          this.student = student;
           this.studentForm.patchValue(student);
         }
       });
+
+    this.isAdmin$ = this.store.select(selectIsAdmin);
   }
 
   ngOnInit(): void {
@@ -80,7 +84,7 @@ export class StudentDetailComponent implements OnInit{
   assignCourse(){
     const data: CourseModalInscription = {
       studenId: this.student?.id!,
-      enrolledCoursesIds: this.courses.map(c => c.id),
+      enrolledCoursesIds: this.courses.map(c => c.id!),
     }
 
     this.dialog
@@ -92,7 +96,8 @@ export class StudentDetailComponent implements OnInit{
           let inscription: Inscription = {
             id: null,
             studentId: this.student?.id!,
-            courseId: course.id
+            courseId: course.id!,
+            date: new Date()
           }
 
           this.store.dispatch(StudentActions.createCourseInscription({payload: inscription}));
@@ -137,9 +142,15 @@ export class StudentDetailComponent implements OnInit{
     });
   }
   
-  inscriptionTableDelete(inscription: Inscription): void{    
+  inscriptionTableDelete(inscription: Inscription): void{
     if(inscription){
-      this.store.dispatch(StudentActions.deleteCourseInscriptionById({ payload: inscription.id! }));
+      this.store.dispatch(StudentActions.deleteCourseInscription({ payload: inscription }));
     }
+  }
+
+  cancel(){
+    this.studentForm.patchValue(this.student!);
+    this.updateMode = false;
+    this.studentForm.disable();
   }
 }

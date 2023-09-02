@@ -31,11 +31,11 @@ export const StudentActions = createActionGroup({
     'Load Student Courses Inscriptions Failure': props<{ error: HttpErrorResponse }>(),
 
     'Create Course Inscription': props<{ payload: Inscription }>(),
-    'Create Course Inscription Success': props<{ data: Inscription }>(),
+    'Create Course Inscription Success': props<{ payload: number }>(),
     'Create Course Inscription Failure': props<{ error: HttpErrorResponse }>(),
     
-    'Delete Course Inscription By Id': props<{ payload: number }>(),
-    'Delete Course Inscription By Id Success': props<{ data: Inscription }>(),
-    'Delete Course Inscription By Id Failure': props<{ error: HttpErrorResponse }>(),
+    'Delete Course Inscription': props<{ payload: Inscription }>(),
+    'Delete Course Inscription Success': props<{ payload: number }>(),
+    'Delete Course Inscription Failure': props<{ error: HttpErrorResponse }>(),
   }
 });

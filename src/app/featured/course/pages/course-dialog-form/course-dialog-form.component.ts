@@ -14,12 +14,14 @@ export class CourseDialogFormComponent implements OnInit {
   nameControl = new FormControl<string | null>(null, [Validators.required]);
   startDateControl = new FormControl<Date | null>(null, [Validators.required]);
   endDateControl = new FormControl<Date | null>(null, [Validators.required]);
+  professorControl = new FormControl<string | null>(null);
 
   form = new FormGroup({
     id: this.idControl,
     name: this.nameControl,
     startDate: this.startDateControl,
-    endDate: this.endDateControl
+    endDate: this.endDateControl,
+    professor: this.professorControl
   });
 
   constructor(

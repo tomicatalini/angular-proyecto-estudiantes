@@ -5,6 +5,7 @@ export interface Inscription {
     id: number | null,
     studentId: number,
     courseId: number,
+    date: Date,
     course?: Course,
     student?: Student
 }

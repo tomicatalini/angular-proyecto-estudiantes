@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 import { CourseActions } from './course.actions';
 import { CourseService } from '../course.service';
 import { Store } from '@ngrx/store';
-import { InscriptionActions } from '../../inscription/store/inscription.actions';
+import { InscriptionService } from '../../inscription/inscription.service';
 
 
 @Injectable()
@@ -45,7 +45,7 @@ export class CourseEffects {
         )
       )
     )
-  })
+  });
 
   updateCourse$ = createEffect(() => {
     return this.actions$.pipe(
@@ -57,29 +57,19 @@ export class CourseEffects {
         )
       )
     )
-  })
+  });
 
   dateleCourseById$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(CourseActions.deleteCourseById),
+      ofType(CourseActions.deleteCourse),
       concatMap((action) => 
-        this.courseService.deleteById('courses', action.courseId).pipe(
-          map(data => CourseActions.deleteCourseByIdSuccess( {data} )),
-          catchError(error => of(CourseActions.deleteCourseByIdFailure( {error} )))
+        this.courseService.deleteById('courses', action.payload.id!).pipe(
+          map(data => CourseActions.deleteCourseSuccess({payload: action.payload})),
+          catchError(error => of(CourseActions.deleteCourseFailure( {error} )))
         )
       )
     )
-  })
-  
-  refreshCourses$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(CourseActions.createCourseSuccess, 
-        CourseActions.updateCourseSuccess,
-        CourseActions.deleteCourseByIdSuccess,
-      ),
-      map(() => this.store.dispatch(CourseActions.loadCourses()))
-    )
-  }, {dispatch: false})
+  });
 
   loadEnrolledStudents$ = createEffect(() => {
     return this.actions$.pipe(
@@ -93,17 +83,56 @@ export class CourseEffects {
     );
   });
 
-  deleteEnrolledStudent$ = createEffect(() => {
+  createStudentInscription$ = createEffect(() => {
+    return this.actions$.pipe(
+
+      ofType(CourseActions.createStudentInscription),
+      concatMap((action) =>
+        this.inscriptionService.create('inscriptions', action.payload).pipe(
+          map((data) => CourseActions.createStudentInscriptionSuccess({ payload: data.courseId })),
+          catchError(error => of(CourseActions.createStudentInscriptionFailure({ error }))))
+      )
+    );
+  });
+
+  deleteStudentInscription$ = createEffect(() => {
+    return this.actions$.pipe(
+
+      ofType(CourseActions.deleteStudentInscription),
+      concatMap((action) =>
+        this.inscriptionService.deleteById('inscriptions', action.payload.id!).pipe(
+          map(() => CourseActions.deleteStudentInscriptionSuccess({ payload: action.payload.courseId })),
+          catchError(error => of(CourseActions.loadEnrolledStudentsFailure({ error }))))
+      )
+    );
+  });
+
+  refreshCourses$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(
-        InscriptionActions.createInscriptionSuccess,
-        InscriptionActions.deleteInscriptionByIdSuccess
+        CourseActions.createCourseSuccess, 
+        CourseActions.updateCourseSuccess,
+        CourseActions.deleteCourseSuccess,
+      ),
+      map(() => this.store.dispatch(CourseActions.loadCourses()))
+    )
+  }, {dispatch: false});
+
+  inscriptionsOperations$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(
+        CourseActions.createStudentInscriptionSuccess,
+        CourseActions.deleteStudentInscriptionSuccess
       ),
       map((action) => 
-        this.store.dispatch(CourseActions.loadEnrolledStudents({courseId: action.data.courseId}))
+        this.store.dispatch(CourseActions.loadEnrolledStudents({ courseId: action.payload}))
       )
     )
   }, {dispatch: false});
 
-  constructor(private actions$: Actions, private courseService: CourseService, private store: Store) {}
+  constructor(
+    private actions$: Actions, 
+    private courseService: CourseService,
+    private inscriptionService: InscriptionService, 
+    private store: Store) {}
 }

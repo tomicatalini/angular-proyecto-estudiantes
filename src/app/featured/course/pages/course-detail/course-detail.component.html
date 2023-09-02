@@ -1,10 +1,12 @@
 <section>
     <header class="m-1 flex flex-row align-items-center justify-content-between">
         <h2>Detalle del Curso</h2>
-        <div class="flex flex-grow justify-content-end gap-2">
-            <!-- <button mat-raised-button *ngIf="!updateMode" color="accent" (click)="enableUpdate()">Habilitar edición</button>
-            <button mat-raised-button *ngIf="updateMode" color="primary" (click)="update()">Aceptar</button> -->
-            <!-- <button mat-raised-button color="warn" (click)="delete()">Eliminar</button> -->
+        <div *ngIf="isAdmin$ | async" 
+            class="flex flex-grow justify-content-end gap-2">
+                <button mat-raised-button *ngIf="!updateMode" color="accent" (click)="enableUpdate()">Habilitar edición</button>
+                <button mat-raised-button *ngIf="updateMode" color="primary" (click)="update()">Aceptar edición</button>
+                <button mat-raised-button *ngIf="updateMode" class="surface-300" (click)="cancel()">Deshacer edición</button>
+                <button mat-raised-button color="warn" (click)="delete()">Eliminar</button>
         </div>
     </header>
     <form [formGroup]="courseForm" class="grid grid-nogutters">
@@ -32,13 +34,19 @@
             <mat-datepicker #pickerEndDate></mat-datepicker>
             <mat-error *ngFor="let error of endDateControl.errors | keyvalue">{{ error | formControlError: 'Fecha de Finalización' }}</mat-error>
         </mat-form-field>
+        <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Profesor</mat-label>
+            <input matInput formControlName="professor" type="text">
+            <mat-error *ngFor="let error of professorControl.errors | keyvalue">{{ error | formControlError: 'Profesor' }}</mat-error>
+        </mat-form-field>
     </form>
 </section>
 <section>
     <header class="m-1 flex flex-row align-items-center justify-content-between">
-        <h2>Gestion de Cursos</h2>
-        <button mat-raised-button color="primary" (click)="enrollStudent()">Agregar Estudiante</button>    
+        <h2>Gestion de Estudiantes</h2>
+        <button mat-raised-button color="primary" (click)="enrollStudent()">Inscribir Estudiante</button>    
     </header>
+    <p class="my-4 text-base">Estudiantes inscriptos al curso: </p>
     <app-inscription-table
         [dataSource]="(enrolledStudents$ | async) || []"
         [canEdit]="false"

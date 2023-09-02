@@ -6,7 +6,6 @@ import { StudentActions } from './student.actions';
 import { Store } from '@ngrx/store';
 import { StudentService } from '../student.service';
 import { InscriptionService } from '../../inscription/inscription.service';
-import { InscriptionActions } from '../../inscription/store/inscription.actions';
 
 
 @Injectable()
@@ -89,20 +88,20 @@ export class StudentEffects {
       ofType(StudentActions.createCourseInscription),
       concatMap((action) => 
         this.inscriptionService.create('inscriptions',action.payload).pipe(
-          map(inscription => StudentActions.createCourseInscriptionSuccess({data: inscription})),
+          map(inscription => StudentActions.createCourseInscriptionSuccess({payload: inscription.studentId})),
           catchError(error => of(StudentActions.createCourseInscriptionFailure({error})))
         )
       )
     )
   });
 
-  deleteCourseInscriptionById$ = createEffect(() => {
+  deleteCourseInscription$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(StudentActions.deleteCourseInscriptionById),
+      ofType(StudentActions.deleteCourseInscription),
       concatMap((action) => 
-        this.inscriptionService.deleteById('inscriptions', action.payload).pipe(
-          map(inscription => StudentActions.deleteCourseInscriptionByIdSuccess({data: inscription})),
-          catchError(error => of(StudentActions.deleteCourseInscriptionByIdFailure({error})))
+        this.inscriptionService.deleteById('inscriptions', action.payload.id!).pipe(
+          map(() => StudentActions.deleteCourseInscriptionSuccess({ payload: action.payload.studentId })),
+          catchError(error => of(StudentActions.deleteCourseInscriptionFailure({error})))
         )
       )
     )
@@ -123,16 +122,12 @@ export class StudentEffects {
     return this.actions$.pipe(
       ofType(
         StudentActions.createCourseInscriptionSuccess,
-        StudentActions.deleteCourseInscriptionByIdSuccess
+        StudentActions.deleteCourseInscriptionSuccess
       ),
-      map((action) => 
-        this.store.dispatch(StudentActions.loadStudentCoursesInscriptions({payload: action.data.studentId}))
-      )
+      map((action) => this.store.dispatch(StudentActions.loadStudentCoursesInscriptions({payload: action.payload})))
     )
   }, {dispatch: false});
-
-
-
+  
   constructor(
     private actions$: Actions,
     private studentService: StudentService,

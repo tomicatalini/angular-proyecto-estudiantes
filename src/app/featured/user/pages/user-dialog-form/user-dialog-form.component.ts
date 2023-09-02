@@ -15,7 +15,7 @@ export class UserDialogFormComponent {
   emailControl = new FormControl<string | null>(null, [Validators.required, Validators.email]);
   passwordControl = new FormControl<string | null>(null, [Validators.required, Validators.minLength(5)]);
   token = new FormControl<string | null>(null);
-  role = new FormControl<string | null>(null);
+  role = new FormControl<string | null>('professor');
 
   form = new FormGroup({
     id: this.idControl,

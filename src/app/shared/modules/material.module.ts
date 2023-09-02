@@ -20,6 +20,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatSelectModule} from '@angular/material/select';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [],
@@ -44,7 +45,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatCardModule,
     MatSelectModule,
     MatAutocompleteModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatTooltipModule,
   ]
 })
 export class MaterialModule { }

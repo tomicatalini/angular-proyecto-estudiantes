@@ -1,18 +1,20 @@
 <div class="m-5">
-    <h2 title class="my-2">Estudiantes</h2>
-    <section class="grid grid-nogutter py-2">    
-        <p class="col-12">En esta sección se encuentran los estudiantes inscriptos a un curso, los cuales se listan en la siguiente tabla.</p>
-        <p class="col-12">Aquí podrá realizar Altas, Modificaciones y Bajas de los estudiantes del curso.</p>
+    <h2 title class="mt-2 mb-6 font-bold">Estudiantes</h2>
+    <section class="grid grid-nogutter py-2 my-2">    
+        <p class="col-12 text-lg">Listado de los estudiantes de la plataforma.</p>
+        <p class="col-12 text-lg">Aquí podrá realizar Altas, Modificaciones y Bajas de los estudiantes del curso, además de poder inscribir un estudiante a los distintos cursos disponibles <i>(opción "detalles" en la tabla)</i>.</p>
+        <p class="col-12 text-lg">Actualmente contamos con <strong>{{studentsCount$ | async}}</strong> estudiantes!</p>
     </section>
 </div>
 
 <section class="grid grid-nogutter py-4 mx-3">
-    <button mat-raised-button 
+    <button *ngIf="isAdmin$ | async" 
+        mat-raised-button 
         color="primary"
         (click)="createUserDialog()">Nuevo Estudiante</button>
     
-    <app-student-list class="col-12 my-3" 
+    <app-student-table class="col-12 my-3" 
         [dataSource]="(dataSource$ | async) || []" 
         (studentEdit)="edit($event)" 
-        (studentDelete)="delete($event)"></app-student-list>
+        (studentDelete)="delete($event)"></app-student-table>
 </section>

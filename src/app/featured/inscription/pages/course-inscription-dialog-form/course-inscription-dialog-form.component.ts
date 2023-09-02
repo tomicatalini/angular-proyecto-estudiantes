@@ -26,7 +26,7 @@ export class CourseInscriptionDialogFormComponent implements OnInit, OnDestroy{
       .getAll('courses')
       .pipe(
         take(1),
-        map(courses => courses.filter(s => !this.data.enrolledCoursesIds?.includes(s.id)))
+        map(courses => courses.filter(s => !this.data.enrolledCoursesIds?.includes(s.id!)))
       )
       .subscribe(enrolledCourses => this.enrolledCourses$.next(enrolledCourses));
   }
@@ -51,7 +51,7 @@ export class CourseInscriptionDialogFormComponent implements OnInit, OnDestroy{
         obs$.pipe(
           take(1),
           map(courses => {
-            return courses.filter(s => !this.data.enrolledCoursesIds?.includes(s.id))
+            return courses.filter(s => !this.data.enrolledCoursesIds?.includes(s.id!))
           })
         )
         .subscribe(enrolledCourses => this.enrolledCourses$.next(enrolledCourses));

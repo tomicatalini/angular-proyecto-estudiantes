@@ -1,10 +1,12 @@
 <section>
     <header class="m-1 flex flex-row align-items-center justify-content-between">
         <h2>Datos del Estudiante</h2>
-        <div class="flex flex-grow justify-content-end gap-2">
-            <button mat-raised-button *ngIf="!updateMode" color="accent" (click)="enableUpdate()">Habilitar edición</button>
-            <button mat-raised-button *ngIf="updateMode" color="primary" (click)="update()">Aceptar</button>
-            <button mat-raised-button color="warn" (click)="delete()">Eliminar</button>
+        <div *ngIf="isAdmin$ | async" 
+            class="flex flex-grow justify-content-end gap-2">
+                <button mat-raised-button *ngIf="!updateMode" color="accent" (click)="enableUpdate()">Habilitar edición</button>
+                <button mat-raised-button *ngIf="updateMode" color="primary" (click)="update()">Aceptar edición</button>
+                <button mat-raised-button *ngIf="updateMode" color="surface-300" (click)="cancel()">Deshacer edición</button>
+                <button mat-raised-button color="warn" (click)="delete()">Eliminar</button>
         </div>
     </header>
     <form [formGroup]="studentForm" class="grid grid-nogutters">
@@ -42,9 +44,11 @@
         <h2>Gestion de Cursos</h2>
         <button mat-raised-button color="primary" (click)="assignCourse()">Asignar Curso</button>    
     </header>
+    <p class="my-4 text-base">Cursos en los que se encuentra inscripto el estudiante: </p>
     <app-inscription-table [dataSource]="(studentInscriptions$ | async) || []" 
         [canView]="false" 
         [canEdit]="false"
+        [view]="'course'"
         class="grid grid-nogutters mx-1" 
         (inscriptionDelete)="inscriptionTableDelete($event)">
     </app-inscription-table>

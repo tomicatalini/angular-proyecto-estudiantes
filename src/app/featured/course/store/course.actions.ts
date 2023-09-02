@@ -22,12 +22,20 @@ export const CourseActions = createActionGroup({
     'Update Course Success': props<{ data: Course }>(),
     'Update Course Failure': props<{ error: HttpErrorResponse }>(),
 
-    'Delete Course By Id': props<{ courseId: number }>(),
-    'Delete Course By Id Success': props<{ data: Course }>(),
-    'Delete Course By Id Failure': props<{ error: HttpErrorResponse }>(),
+    'Delete Course': props<{ payload: Course }>(),
+    'Delete Course Success': props<{ payload: Course }>(),
+    'Delete Course Failure': props<{ error: HttpErrorResponse }>(),
 
     'Load Enrolled Students': props<{ courseId: number }>(),
     'Load Enrolled Students Success': props<{ data: Inscription[] }>(),
     'Load Enrolled Students Failure': props<{ error: HttpErrorResponse }>(),
+
+    'Create Student Inscription': props<{ payload: Inscription }>(),
+    'Create Student Inscription Success': props<{ payload: number }>(),
+    'Create Student Inscription Failure': props<{ error: HttpErrorResponse }>(),
+    
+    'Delete Student Inscription': props<{ payload: Inscription }>(),
+    'Delete Student Inscription Success': props<{ payload: number }>(),
+    'Delete Student Inscription Failure': props<{ error: HttpErrorResponse }>(),
   }
 });

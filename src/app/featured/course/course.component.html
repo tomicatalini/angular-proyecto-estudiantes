@@ -1,12 +1,16 @@
-<div class="m-5 mb-3">
-    <h2 title class="my-2">Cursos</h2>
-    <section class="grid grid-nogutter py-2">   
-        <p class="col-12">En esta sección se encuentran los cursos que se dictan en la plataforma.</p>
-        <p class="col-12">Aquí podrá realizar Altas, Modificaciones y Bajas de los mismos.</p>
+<div class="m-5">
+    <h2 title class="mt-2 mb-6 font-bold">Cursos</h2>
+    <section class="grid grid-nogutter py-2 my-2">    
+        <p class="col-12 text-lg">Listado de los cursos disponibles en la plataforma.</p>
+        <p class="col-12 text-lg">Aquí podrá realizar las operaciones sobre los cursos, además de poder inscribir estudiantes a un cursos <i>(opción "detalles" en la tabla)</i>.</p>
+        <p class="col-12 text-lg">Actualmente contamos con <strong>{{coursesCount$ | async}}</strong> cursos!</p>
     </section>
 </div>
-<section class="grid grid-nogutter mx-3">
-    <button mat-raised-button 
+
+<section class="grid grid-nogutter py-4 mx-3">
+    <button 
+        *ngIf="isAdmin$ | async"
+        mat-raised-button 
         color="primary"
         (click)="createCourseDialog()">Nuevo Curso</button>
 

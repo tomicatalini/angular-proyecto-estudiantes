@@ -26,15 +26,28 @@
 
     <!-- Actions Column -->
     <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <th mat-header-cell *matHeaderCellDef class="w-12rem"> Acciones </th>
         <td mat-cell *matCellDef="let user">
-            <button mat-icon-button [routerLink]="user.id" color="primary">
+            <button 
+              mat-icon-button 
+              [routerLink]="user.id"
+              matTooltip="Detalles" 
+              color="primary">
                 <mat-icon>visibility</mat-icon>
             </button>
-            <button mat-icon-button color="primary" (click)="edit(user)">
+
+            <button 
+              mat-icon-button 
+              color="primary"
+              matTooltip="Modificar"  
+              (click)="edit(user)">
                 <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button color="warn" (click)="delete(user)">
+            <button 
+              mat-icon-button 
+              color="warn"
+              matTooltip="Eliminar" 
+              (click)="delete(user)">
                 <mat-icon>delete</mat-icon>
             </button>
         </td>

@@ -21,6 +21,11 @@
             <mat-datepicker #pickerEndDate></mat-datepicker>
             <mat-error *ngFor="let error of endDateControl.errors | keyvalue">{{ error | formControlError: 'Fecha de Finalización' }}</mat-error>
         </mat-form-field>
+        <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Profesor</mat-label>
+            <input matInput formControlName="professor" type="text">
+            <mat-error *ngFor="let error of professorControl.errors | keyvalue">{{ error | formControlError: 'Profesor' }}</mat-error>
+        </mat-form-field>
         <button mat-raised-button color="primary" class="col-12" (click)="close()">Guardar</button>
     </form>
 </mat-dialog-content>
