@@ -3,23 +3,20 @@ import { StudentService } from '../../student.service';
 import { Student } from '../../model/student';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { InscriptionDialogFormComponent } from 'src/app/featured/inscription/pages/inscription-dialog-form/inscription-dialog-form.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { InscriptionService } from '../../../inscription/inscription.service';
 import { Course } from 'src/app/featured/course/model/model';
-import { Inscription, InscriptionModalData } from 'src/app/featured/inscription/models/models';
-import { Observable, finalize, pipe, take, tap } from 'rxjs';
+import { CourseModalInscription, Inscription } from 'src/app/featured/inscription/models/models';
+import { Observable, take, tap } from 'rxjs';
 import Swal from 'sweetalert2';
 import { Store } from '@ngrx/store';
-import { InscriptionActions } from 'src/app/featured/inscription/store/inscription.actions';
-import { selectInscriptionLoading, selectInscriptions } from 'src/app/featured/inscription/store/inscription.selectors';
 import { StudentActions } from '../../store/student.actions';
-import { selectStudent, selectStudentCourses } from '../../store/student.selectors';
+import { selectStudent, selectStudentCoursesInscriptions } from '../../store/student.selectors';
+import { CourseInscriptionDialogFormComponent } from 'src/app/featured/inscription/pages/course-inscription-dialog-form/course-inscription-dialog-form.component';
 
 @Component({
   selector: 'app-student-detail',
   templateUrl: './student-detail.component.html',
-  styleUrls: ['./student-detail.component.scss']
+  styleUrls: []
 })
 export class StudentDetailComponent implements OnInit{
 
@@ -38,7 +35,7 @@ export class StudentDetailComponent implements OnInit{
   }); 
 
   student: Student | null = null;
-  studenInscription$ = new Observable<Inscription[]>;
+  studentInscriptions$: Observable<Inscription[]>;
   
   courses: Course[] = [];
 
@@ -46,16 +43,15 @@ export class StudentDetailComponent implements OnInit{
 
   constructor(
     private studentService: StudentService,
-    private inscriptionService: InscriptionService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private store: Store,
     public dialog: MatDialog,    
   ){
-    this.studenInscription$ = this.store.select(selectInscriptions).pipe(
+    this.studentInscriptions$ = this.store.select(selectStudentCoursesInscriptions).pipe(
       tap(inscriptions => {
         if(inscriptions){
-          this.courses = inscriptions.map(insc => insc.course!);
+          this.courses = inscriptions.map(i => i.course!);
         }
       })
     );
@@ -78,30 +74,28 @@ export class StudentDetailComponent implements OnInit{
     }
 
     this.store.dispatch(StudentActions.loadStudentById({payload: studentId}));
-    this.store.dispatch(InscriptionActions.loadInscriptionsByStudentId({payload: studentId}));
+    this.store.dispatch(StudentActions.loadStudentCoursesInscriptions({payload: studentId}));
   }
 
   assignCourse(){
-    const data: InscriptionModalData = {
-      id: this.student?.id!,
-      students: null,
-      courses: this.courses,
-      entity: 'student'
+    const data: CourseModalInscription = {
+      studenId: this.student?.id!,
+      enrolledCoursesIds: this.courses.map(c => c.id),
     }
 
     this.dialog
-      .open(InscriptionDialogFormComponent, {data})
+      .open(CourseInscriptionDialogFormComponent, {data})
       .afterClosed()
       .pipe(take(1))
-      .subscribe( (courseId: number) => {
-        if(courseId){
+      .subscribe( (course: Course) => {
+        if(course){
           let inscription: Inscription = {
             id: null,
             studentId: this.student?.id!,
-            courseId: courseId
+            courseId: course.id
           }
 
-          this.inscriptionService.create('inscriptions', inscription);
+          this.store.dispatch(StudentActions.createCourseInscription({payload: inscription}));
         }
       });
   }
@@ -145,7 +139,7 @@ export class StudentDetailComponent implements OnInit{
   
   inscriptionTableDelete(inscription: Inscription): void{    
     if(inscription){
-      this.inscriptionService.deleteById('inscriptions', inscription.id!);
+      this.store.dispatch(StudentActions.deleteCourseInscriptionById({ payload: inscription.id! }));
     }
   }
 }

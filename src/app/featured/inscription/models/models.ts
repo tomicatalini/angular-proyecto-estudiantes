@@ -9,9 +9,12 @@ export interface Inscription {
     student?: Student
 }
 
-export interface InscriptionModalData {
-    id: number,
-    students: Student[] | null,
-    courses: Course[] | null,
-    entity: string,
+export interface StudentModalInscription {
+    courseId: number,
+    enrolledStudentsIds: number[] | null,
+}
+
+export interface CourseModalInscription {
+    studenId: number,
+    enrolledCoursesIds: number[] | null,
 }

@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Course } from '../../model/model';
 import { Observable, take, tap } from 'rxjs';
-import { CourseService } from '../../course.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectCourse, selectEnrolledStudent } from '../../store/course.selectors';
 import { CourseActions } from '../../store/course.actions';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Student } from 'src/app/featured/student/model/student';
-import { Inscription, InscriptionModalData } from 'src/app/featured/inscription/models/models';
+import { Inscription, StudentModalInscription } from 'src/app/featured/inscription/models/models';
 import { InscriptionActions } from 'src/app/featured/inscription/store/inscription.actions';
 import { MatDialog } from '@angular/material/dialog';
-import { InscriptionDialogFormComponent } from 'src/app/featured/inscription/pages/inscription-dialog-form/inscription-dialog-form.component';
+import { StudentInscriptionDialogFormComponent } from 'src/app/featured/inscription/pages/student-inscription-dialog-form/student-inscription-dialog-form.component';
 
 @Component({
   selector: 'app-course-detail',
@@ -80,22 +79,21 @@ export class CourseDetailComponent implements OnInit {
   }
 
   enrollStudent(){
-    const data: InscriptionModalData = {
-      id: this.course?.id!,
-      students: this.enrolledStudents,
-      courses: null,
-      entity: 'course'
+    const data: StudentModalInscription = {
+      courseId: this.course?.id!,
+      enrolledStudentsIds: this.enrolledStudents.map(s => s.id)
     }
 
     this.dialog
-      .open(InscriptionDialogFormComponent, {data})
+      .open(StudentInscriptionDialogFormComponent, {data})
       .afterClosed()
-      .subscribe((studentId: number) => {
-        if(studentId){
+      .pipe(take(1))
+      .subscribe((student: Student) => {
+        if(student){
           const inscription: Inscription = {
             id: null,
             courseId: this.course?.id!,
-            studentId: studentId
+            studentId: student.id
           }
           this.store.dispatch(InscriptionActions.createInscription({payload: inscription}));
         }

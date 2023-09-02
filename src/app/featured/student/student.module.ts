@@ -11,7 +11,6 @@ import { StudentDetailComponent } from './components/student-detail/student-deta
 import { RouterModule } from '@angular/router';
 import { StudentRoutingModule } from './student-routing.module';
 import { InscriptionModule } from '../inscription/inscription.module';
-import { CourseModule } from '../course/course.module';
 import { EffectsModule } from '@ngrx/effects';
 import { StudentEffects } from './store/student.effects';
 import { StoreModule } from '@ngrx/store';

@@ -11,7 +11,7 @@ import { CustomNotifierService } from 'src/app/core/services/custom-notifier.ser
 @Component({
   selector: 'app-student',
   templateUrl: './student.component.html',
-  styleUrls: ['./student.component.scss']
+  styleUrls: []
 })
 export class StudentComponent {
   dataSource$: Observable<Student[]>;

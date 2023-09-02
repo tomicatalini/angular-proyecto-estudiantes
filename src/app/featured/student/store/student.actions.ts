@@ -1,7 +1,7 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { Student } from '../model/student';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Course } from '../../course/model/model';
+import { Inscription } from '../../inscription/models/models';
 
 export const StudentActions = createActionGroup({
   source: 'Student',
@@ -14,10 +14,6 @@ export const StudentActions = createActionGroup({
     'Load Student By Id Success': props<{ data: Student }>(),
     'Load Student By Id Failure': props<{ error: HttpErrorResponse }>(),
 
-    'Load Student Courses': props< {payload: number} >(),
-    'Load Student Courses Success': props<{ data: Course[] }>(),
-    'Load Student Courses Failure': props<{ error: HttpErrorResponse }>(),
-
     'Create Student': props<{ payload: Student }>(),
     'Create Student Success': props<{ data: Student }>(),
     'Create Student Failure': props<{ error: HttpErrorResponse }>(),
@@ -29,5 +25,17 @@ export const StudentActions = createActionGroup({
     'Delete Student By Id': props<{ studentId: number }>(),
     'Delete Student By Id Success': props<{ data: Student }>(),
     'Delete Student By Id Failure': props<{ error: HttpErrorResponse }>(),
+
+    'Load Student Courses Inscriptions': props< {payload: number} >(),
+    'Load Student Courses Inscriptions Success': props<{ data: Inscription[] }>(),
+    'Load Student Courses Inscriptions Failure': props<{ error: HttpErrorResponse }>(),
+
+    'Create Course Inscription': props<{ payload: Inscription }>(),
+    'Create Course Inscription Success': props<{ data: Inscription }>(),
+    'Create Course Inscription Failure': props<{ error: HttpErrorResponse }>(),
+    
+    'Delete Course Inscription By Id': props<{ payload: number }>(),
+    'Delete Course Inscription By Id Success': props<{ data: Inscription }>(),
+    'Delete Course Inscription By Id Failure': props<{ error: HttpErrorResponse }>(),
   }
 });

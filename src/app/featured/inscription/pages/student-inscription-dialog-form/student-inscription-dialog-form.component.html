@@ -1,0 +1,29 @@
+<h2 mat-dialog-title title class="text-center font-bold">{{'agregar estudiante' | uppercase}}</h2>
+<mat-dialog-content>
+  <p>Seleccione al <strong>estudiante</strong> que desea inscribir al curso</p>
+   <ng-container *ngIf="enrolledStudents$ | async as enrolledStudents; else cargando">
+      <mat-form-field appearance="outline" class="col-12">
+          <mat-label>Estudiantes</mat-label>
+          <input matInput
+              [matAutocomplete]="auto"
+              [formControl]="control"
+              tabindex="-1">
+              <mat-autocomplete [displayWith]="displayFn" #auto="matAutocomplete">
+                <mat-option *ngFor="let student of enrolledStudents" [value]="student">
+                  <span>#{{student.id}} | {{student.name }}</span>
+                </mat-option>
+              </mat-autocomplete>
+              <mat-hint class="text-blue-500">Filtro unicamente por ID</mat-hint>                
+        </mat-form-field>
+        
+      </ng-container>
+      <ng-template #cargando>
+        Buscando estudiantes...
+      </ng-template>
+      
+    </mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button color="primary" class="flex-1" (click)="close()">Guardar</button>
+  <button mat-raised-button class="flex-1 surface-400" (click)="cancel()">Cancelar</button>
+</mat-dialog-actions>
+

@@ -42,7 +42,7 @@
         <h2>Gestion de Cursos</h2>
         <button mat-raised-button color="primary" (click)="assignCourse()">Asignar Curso</button>    
     </header>
-    <app-inscription-table [dataSource]="(studenInscription$ | async) || []" 
+    <app-inscription-table [dataSource]="(studentInscriptions$ | async) || []" 
         [canView]="false" 
         [canEdit]="false"
         class="grid grid-nogutters mx-1" 

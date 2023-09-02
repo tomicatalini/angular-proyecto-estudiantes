@@ -43,11 +43,5 @@
       "endDate": "2023-09-21T03:00:00.000Z"
     }
   ],
-  "inscriptions": [
-    {
-      "id": 1,
-      "courseId": 6,
-      "studentId": 3
-    }
-  ]
+  "inscriptions": []
 }

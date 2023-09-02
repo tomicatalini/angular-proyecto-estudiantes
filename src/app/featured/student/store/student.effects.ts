@@ -3,9 +3,10 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, concatMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { StudentActions } from './student.actions';
-import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 import { StudentService } from '../student.service';
+import { InscriptionService } from '../../inscription/inscription.service';
+import { InscriptionActions } from '../../inscription/store/inscription.actions';
 
 
 @Injectable()
@@ -35,13 +36,13 @@ export class StudentEffects {
     );
   });
 
-  loadStudentCourses$ = createEffect(() => {
+  loadStudentCoursesInscriptions$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(StudentActions.loadStudentCourses),
+      ofType(StudentActions.loadStudentCoursesInscriptions),
       concatMap((action) => 
-        this.studentService.getAllStudentCourses(action.payload).pipe(
-          map(data => StudentActions.loadStudentCoursesSuccess( {data})),
-          catchError(error => of(StudentActions.loadStudentCoursesFailure({error})))
+        this.inscriptionService.getAllByStudentId(action.payload).pipe(
+          map(data => StudentActions.loadStudentCoursesInscriptionsSuccess( {data})),
+          catchError(error => of(StudentActions.loadStudentCoursesInscriptionsFailure({error})))
         )
       )
     )
@@ -81,49 +82,60 @@ export class StudentEffects {
         )
       )
     )
-  })
-  
-  createStudentSuccess$ = createEffect(() => {
+  });
+
+  createCourseInscription$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(StudentActions.createStudentSuccess, 
+      ofType(StudentActions.createCourseInscription),
+      concatMap((action) => 
+        this.inscriptionService.create('inscriptions',action.payload).pipe(
+          map(inscription => StudentActions.createCourseInscriptionSuccess({data: inscription})),
+          catchError(error => of(StudentActions.createCourseInscriptionFailure({error})))
+        )
+      )
+    )
+  });
+
+  deleteCourseInscriptionById$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(StudentActions.deleteCourseInscriptionById),
+      concatMap((action) => 
+        this.inscriptionService.deleteById('inscriptions', action.payload).pipe(
+          map(inscription => StudentActions.deleteCourseInscriptionByIdSuccess({data: inscription})),
+          catchError(error => of(StudentActions.deleteCourseInscriptionByIdFailure({error})))
+        )
+      )
+    )
+  });
+  
+  studentsOperationsSuccess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(
+        StudentActions.createStudentSuccess, 
         StudentActions.updateStudentSuccess,
         StudentActions.deleteStudentByIdSuccess,
       ),
       map(() => this.store.dispatch(StudentActions.loadStudents()))
     )
-  }, {dispatch: false})
+  }, {dispatch: false});
+
+  inscriptionsOperationsSuccess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(
+        StudentActions.createCourseInscriptionSuccess,
+        StudentActions.deleteCourseInscriptionByIdSuccess
+      ),
+      map((action) => 
+        this.store.dispatch(StudentActions.loadStudentCoursesInscriptions({payload: action.data.studentId}))
+      )
+    )
+  }, {dispatch: false});
+
+
 
   constructor(
-    private actions$: Actions, 
-    private httpClient: HttpClient,
-    private studentService: StudentService, 
+    private actions$: Actions,
+    private studentService: StudentService,
+    private inscriptionService: InscriptionService, 
     private store: Store) {}
-  
-  // private getStudentById(studentId: number): Observable<Student> {
-  //   return this.httpClient.get<Student>(environment.baseApiUrl + `/students/${studentId}`);
-  // }
-
-  // private getAll(): Observable<Student[]> {
-  //   return this.httpClient.get<Student[]>(environment.baseApiUrl + `/students`);
-  // }
-
-  // private getAllStudentCourses(studentId: number):  Observable<Course[]>{
-  //   return this.httpClient
-  //     .get<Inscription[]>(environment.baseApiUrl + `/inscriptions?_expand=student&_expand=course&studentId=${studentId}`)
-  //     .pipe(
-  //       map((inscriptions) => inscriptions.map(inscription => inscription.course!))
-  //     )
-  // }
-
-  // private createStudent(payload: Student): Observable<Student> {
-  //   return this.httpClient.post<Student>(environment.baseApiUrl + `/students`, payload);
-  // }
-
-  // private updateStudent(studentId: number, payload: Student): Observable<Student> {
-  //   return this.httpClient.put<Student>(environment.baseApiUrl + `/students/${studentId}`, payload);
-  // }
-
-  // private deleteStudentById(studentId: number): Observable<Student>{
-  //   return this.httpClient.delete<Student>(environment.baseApiUrl + `/students/${studentId}`);
-  // }
 }

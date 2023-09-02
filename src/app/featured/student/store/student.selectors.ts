@@ -7,4 +7,4 @@ export const selectStudentState = createFeatureSelector<fromStudent.State>(
 
 export const selectStudent = createSelector(selectStudentState, state => state.student);
 export const selectStudents = createSelector(selectStudentState, state => state.data);
-export const selectStudentCourses = createSelector(selectStudentState, state => state.courses);
+export const selectStudentCoursesInscriptions = createSelector(selectStudentState, state => state.inscriptions);

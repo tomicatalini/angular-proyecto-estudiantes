@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, take } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Inscription } from './models/models';
 import { ApiService } from 'src/app/core/services/api.service';
-import { CustomNotifierService } from 'src/app/core/services/custom-notifier.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { KeyValue } from '@angular/common';
@@ -13,8 +12,7 @@ import { KeyValue } from '@angular/common';
 export class InscriptionService extends ApiService<Inscription>{
 
   constructor(
-    private _httpClient: HttpClient,
-    private notifierService: CustomNotifierService
+    private _httpClient: HttpClient
   ) { 
     super(_httpClient);
   }
