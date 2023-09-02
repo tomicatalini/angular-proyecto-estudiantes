@@ -21,8 +21,8 @@ export class UserService {
     return this._users$.asObservable();
   }
 
-  getById(userId: number): Observable<User | undefined> {
-    return this.apiService.getById('users', userId).pipe(take(1));
+  getById(userId: number): Observable<User> {
+    return this.apiService.getById('users', userId);
   }
 
   load(): void {
@@ -49,27 +49,11 @@ export class UserService {
       });
   }
 
-  update(id: number, payload: User): void {
-    this.apiService
-    .updateById('users', id, payload)
-    .subscribe({
-      next: () => {
-        this.load();
-        this.notifierService.toastSuccessNotification('Operación exitosa!');
-      },
-      error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
-    });
+  update(id: number, payload: User): Observable<User> {
+    return this.apiService.updateById('users', id, payload);
   }
 
-  deleteById(userId: number): void {
-    this.apiService
-      .deleteById('users', userId)
-      .subscribe({
-        next: () => {
-          this.load();
-          this.notifierService.toastSuccessNotification('Operación exitosa!');
-        },
-        error: () => this.notifierService.toastErrorNotification('No se pudo realizar la operación...')
-      });
+  deleteById(userId: number): Observable<User> {
+    return this.apiService.deleteById('users', userId);
   }
 }

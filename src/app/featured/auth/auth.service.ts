@@ -49,7 +49,7 @@ export class AuthService {
         if(response && response.length){
           const user = response[0];
 
-          localStorage.setItem('token', user.token);
+          localStorage.setItem('token', user.token!);
 
           this.store.dispatch(AuthActions.setAuthUser({ payload: user }));
           this.router.navigate(['/dashboard']);

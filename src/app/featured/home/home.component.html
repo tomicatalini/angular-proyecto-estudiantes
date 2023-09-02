@@ -13,7 +13,7 @@
         </mat-list>
     </div>
     <div *ngIf="(userRole$ | async | lowercase) !== 'admin'" class="text-xl my-4">
-        <p>Usted posee un usuario con rol <strong>{{userRole$ | async}}</strong> por lo tiene permisos restrigidos en la plataforma, es decir, puede realizar las siguientes operaciones: </p> 
+        <p>Usted posee un usuario con rol <strong>{{userRole$ | async}}</strong> por lo tiene permisos restringidos en la plataforma, es decir, puede realizar las siguientes operaciones: </p> 
         <mat-list>
             <mat-list-item>Listado y acceso de solo lectura de Estudiantes</mat-list-item>
             <mat-list-item>Listado y acceso de solo lectura de Cursos</mat-list-item>
@@ -24,6 +24,6 @@
 <section class="mx-4 mb-6">
     <h2 class="text-2xl font-bold">Inscripciones</h2>
     <p class="text-lg my-4">Puede realizar inscripciones tanto en la sección de <strong>Estudiantes</strong> como de <strong>Cursos</strong>.</p>
-    <p class="text-lg my-4">Para inscribir a un estudiante en uno o mas cursos, debe dirigirse a la sección de <strong routerLink="/dashboard/student" class="no-underline text-blue-400 cursor-pointer">Estudiantes</strong>, ingresar a la opción de detalles del estudiante deseado y ahi tendrá la opcion para hacer las inscripciones.</p>
-    <p class="text-lg my-4">Para inscribir estudiantes en un curso, debe dirigirse a la seccion de <strong routerLink="/dashboard/course" class="no-underline text-orange-400 cursor-pointer">Cursos</strong>, ingresar a la opción de detalles del curso deseado y ahi tendrá la opcion para hacer las inscripciones de uno o mas estudiantes.</p>
+    <p class="text-lg my-4">Para inscribir a un estudiante en uno o mas cursos, debe dirigirse a la sección de <strong routerLink="/dashboard/student" class="no-underline text-blue-400 cursor-pointer">Estudiantes</strong>, ingresar a la opción de detalles del estudiante deseado y ahí tendrá la opción para hacer las inscripciones.</p>
+    <p class="text-lg my-4">Para inscribir estudiantes en un curso, debe dirigirse a la seccion de <strong routerLink="/dashboard/course" class="no-underline text-orange-400 cursor-pointer">Cursos</strong>, ingresar a la opción de detalles del curso deseado y ahí tendrá la opción para hacer las inscripciones de uno o mas estudiantes.</p>
 </section>

@@ -1,14 +1,16 @@
 import { Component } from '@angular/core';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil, take } from 'rxjs';
 import { User } from './models/models';
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from './user.service';
 import { UserDialogFormComponent } from './pages/user-dialog-form/user-dialog-form.component';
+import Swal from 'sweetalert2';
+import { CustomNotifierService } from 'src/app/core/services/custom-notifier.service';
 
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
-  styleUrls: ['./user.component.scss']
+  styleUrls: []
 })
 export class UserComponent {
   dataSource$: Observable<User[]>;
@@ -16,7 +18,8 @@ export class UserComponent {
   
   constructor(
     public dialog: MatDialog,
-    private userService: UserService
+    private userService: UserService,
+    private notifier: CustomNotifierService
   ){    
     this.dataSource$ = this.userService.getAll();
   }
@@ -34,13 +37,25 @@ export class UserComponent {
       )
       .subscribe( (edited: User) => {
         if(edited){
-          this.userService.update(user.id, edited);
+          this.userService
+            .update(user.id!, edited)
+            .pipe(take(1))
+            .subscribe(() => this.userService.load());
         }
       });
   }
 
   delete(user: User): void{
-    this.userService.deleteById(user.id);
+    
+    this.notifier
+      .warnPopup('Eliminar', '¿Desea continuar con la eliminación del usuario?')
+      .then( res => {
+        if(res.isConfirmed){
+          this.userService.deleteById(user.id!)
+            .pipe(take(1))
+            .subscribe(() => this.userService.load());
+        } 
+      });
   }
 
   createUserDialog(): void{

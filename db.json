@@ -11,21 +11,12 @@
     },
     {
       "id": 3,
-      "name": "Diego Armando",
+      "name": "Diego Armando2",
       "surname": "Maradona",
       "email": "diego10@gmail.com",
       "password": "12345",
       "token": "u1RHhZWqkEP4ntjgP8PP",
       "role": "tutor"
-    },
-    {
-      "id": 4,
-      "name": "Margarita",
-      "surname": "Perez",
-      "email": "MP@gmail.com",
-      "password": "12345",
-      "token": "H84d4lgo3qBNLRKdIUhD",
-      "role": "professor"
     }
   ],
   "students": [

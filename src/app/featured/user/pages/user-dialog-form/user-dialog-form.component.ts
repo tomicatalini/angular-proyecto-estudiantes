@@ -6,7 +6,7 @@ import { User } from '../../models/models';
 @Component({
   selector: 'app-user-dialog-form',
   templateUrl: './user-dialog-form.component.html',
-  styleUrls: ['./user-dialog-form.component.scss']
+  styleUrls: []
 })
 export class UserDialogFormComponent {
   idControl = new FormControl<number | null>(null);
@@ -15,7 +15,7 @@ export class UserDialogFormComponent {
   emailControl = new FormControl<string | null>(null, [Validators.required, Validators.email]);
   passwordControl = new FormControl<string | null>(null, [Validators.required, Validators.minLength(5)]);
   token = new FormControl<string | null>(null);
-  role = new FormControl<string | null>('professor');
+  role = new FormControl<string | null>(null, [Validators.required]);
 
   form = new FormGroup({
     id: this.idControl,
@@ -35,6 +35,8 @@ export class UserDialogFormComponent {
   ) {
     if(data){
       this.form.patchValue(data);
+    } else {
+      this.role.setValue('professor');
     }
   }
 

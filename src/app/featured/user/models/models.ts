@@ -1,10 +1,9 @@
 export interface User {
-    id: number,
-    name: string,
-    surname: string,
-    email: string,
-    password: string,
-    token: string,
-    role: string
-    
+    id: number | null,
+    name: string | null,
+    surname: string | null,
+    email: string | null,
+    password: string | null,
+    token: string | null,
+    role: string | null,    
 }

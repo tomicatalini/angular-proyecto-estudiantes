@@ -1,2 +1,45 @@
-<h1>Detalle del Usuario</h1>
-<pre>{{user$ | async | json}}</pre>
+<section>
+    <header class="m-1 flex flex-row align-items-center justify-content-between">
+        <h2>Detalle del Curso</h2>
+        <div class="flex flex-grow justify-content-end gap-2">
+            <button mat-raised-button *ngIf="!updateMode" color="accent" (click)="enableUpdate()">Habilitar edición</button>
+            <button mat-raised-button *ngIf="updateMode" color="primary" (click)="update()">Aceptar edición</button>
+            <button mat-raised-button *ngIf="updateMode" class="surface-300" (click)="cancel()">Deshacer edición</button>
+            <button mat-raised-button color="warn" (click)="delete()">Eliminar</button>
+        </div>
+    </header>
+    <form [formGroup]="form" class="grid">
+        <input matInput formControlName="id" type="number" hidden>
+        <mat-form-field appearance="outline" class="col-6">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="name" type="text">
+            <mat-error *ngFor="let error of nameControl.errors | keyvalue">{{ error | formControlError: 'Nombre' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-6">
+            <mat-label>Apellido</mat-label>
+            <input matInput formControlName="surname" type="text">
+            <mat-error *ngFor="let error of surnameControl.errors | keyvalue">{{ error | formControlError: 'Apellido' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Correo Electrónico</mat-label>
+            <input matInput formControlName="email" type="email">
+            <mat-error *ngFor="let error of emailControl.errors | keyvalue">{{ error | formControlError: 'Correo Electrónico' }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-6">
+            <mat-label>Contraseña</mat-label>
+            <input matInput formControlName="password" [type]="showPassword ? 'text' :'password'">
+            <button mat-icon-button matSuffix (click)="showPassword = !showPassword">
+            <mat-icon>{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngFor="let error of passwordControl.errors | keyvalue">{{ error | formControlError: 'Contraseña' }}</mat-error>
+        </mat-form-field>
+        <div class="col-12 flex flex-column">
+            <mat-label>Rol</mat-label>
+            <mat-radio-group formControlName="role">
+                <mat-radio-button value="professor" [checked]="true">Profesor</mat-radio-button>
+                <mat-radio-button value="tutor">Tutor</mat-radio-button>
+                <mat-radio-button value="admin">Administrador</mat-radio-button>
+            </mat-radio-group>
+        </div>
+    </form>
+</section>

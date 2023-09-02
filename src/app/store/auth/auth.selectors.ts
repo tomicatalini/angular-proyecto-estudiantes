@@ -7,6 +7,6 @@ export const selectAuthUser = createSelector(selectAuthState, (state) => state.u
 
 export const selectUserToken = createSelector(selectAuthUser, (user) => user?.token);
 
-export const selectIsAdmin = createSelector(selectAuthUser, (user) => user?.role.toLowerCase() === 'admin');
+export const selectIsAdmin = createSelector(selectAuthUser, (user) => user?.role!.toLowerCase() === 'admin');
 export const selectUserName = createSelector(selectAuthUser, (user) => user?.name || null);
 export const selectUserRole = createSelector(selectAuthUser, (user) => user?.role || null);
